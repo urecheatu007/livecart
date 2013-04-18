@@ -1,3 +1,5 @@
+.todo { border: 1px dashed red; }
+
 #topMenu ul.nav li.dropdown:hover ul.dropdown-menu
 {
     display: block;
@@ -12,16 +14,6 @@
 .sidebar-nav
 {
 	padding: 9px 0;
-}
-
-.row-fluid .firstPanel
-{
-	margin-left: 0;
-}
-
-.row-fluid .thumbnail
-{
-	margin-bottom: 18px;
 }
 
 div.btn-group:hover ul.dropdown-menu{
@@ -44,7 +36,6 @@ caption, th, td
 }
 
 .descr li,
-.newsEntry li,
 #productDescription li,
 .message li,
 .staticPageText li
@@ -54,7 +45,6 @@ caption, th, td
 }
 
 .descr ol li,
-.newsEntry ol li,
 #productDescription ol li,
 .message ol li,
 .staticPageText ol li
@@ -71,11 +61,6 @@ body, h4
 td
 {
 	vertical-align: top;
-}
-
-p
-{
-	margin: 10px 0;
 }
 
 .clear
@@ -105,11 +90,7 @@ label.cancel,
 }
 
 /* bold things */
-h4,
-#breadCrumbCaption,
-div.box .title,
 .price,
-#addToCart,
 .required label,
 .errorText,
 .eavAttributes .attrName,
@@ -180,12 +161,9 @@ a.cancel,
 .logout,
 .latestNewsSide .date,
 #currency, #language,
-.newsReadMore,
 .count,
 li.moreSubCats,
-a.layoutSetList, a.layoutSetGrid,
 .spec,
-a.addToCart,
 .listPrice,
 .productListRating a,
 .overallRating a,
@@ -197,16 +175,13 @@ a.addToCart,
 .fieldDescription,
 .progressOrder,
 a.cvv,
-.multiAddress .shipmentAddress,
-.box.compare li a
+.multiAddress .shipmentAddress
 {
 	font-size: smaller;
 }
 
 /* centered text */
-div.box .title,
 .subCategories td.subCatImage,
-.productGrid td,
 ul.productList .image,
 .overallRating,
 .noStock, .lowStock,
@@ -256,7 +231,6 @@ div.addressControl,
 /* vertical centering */
 .subCatImage,
 .subCategories td.details,
-.orderingControls *,
 .overallRating *,
 #mainInfo td,
 .ratingCategoryName,
@@ -272,8 +246,7 @@ img.calendar_button
 /* left floats */
 #logoContainer,
 .allFilters .filterGroup,
-.resultStats .pagingInfo, .categoryLayoutSwitch,
-ul.productList .image,
+.resultStats .pagingInfo,
 #productSummaryContainer,
 #ratingSummary,
 .ratingBreakdown,
@@ -309,9 +282,6 @@ input.radio, input.checkbox,
 #topMenuContainer,
 #currency, #language,
 .resultStats .sortOptions,
-ul.productList a.addToCart, .productGrid a.addToCart,
-ul.productList .pricingInfo,
-ul.productList .orderingControls,
 .specSummary,
 div.review .ratingBreakdown,
 .checkoutButtons,
@@ -327,8 +297,6 @@ div.review .ratingBreakdown,
 }
 
 /* links/menus with background images */
-.resultPages .previous,
-a.addToCart,
 ul.attributeList li,
 .continueShopping,
 #userMenu li,
@@ -341,7 +309,6 @@ ul.downloadFile li,
 
 /* right side background images */
 #smallCart a.checkout,
-.resultPages .next,
 .proceedToCheckout,
 .websiteUrl a
 {
@@ -351,7 +318,6 @@ ul.downloadFile li,
 
 /* background color 1: light grey */
 tr.odd,
-div.box .content,
 #userMenuContainer,
 fieldset,
 div.addressBlock,
@@ -373,7 +339,6 @@ tr.heading td,
 }
 
 tr.even td,
-div.box .title,
 #background-color2-var
 {
     background-color: #eee;
@@ -388,7 +353,6 @@ span.templateLocator span.templateName,
 #payTotal div,
 #testHandlerWarning,
 #checkoutProgress a.active,
-.categoryLayoutSwitch a.active,
 .specSummary
 {
 	background-color: #fffccc;
@@ -482,30 +446,6 @@ body.threeColumn #content
 #logoContainer
 {
 	padding: 8px;
-}
-
-/*****************************
-	Boxes
-*****************************/
-div.box
-{
-	margin-bottom: 5px;
-	overflow: visible;
-	position: relative;
-}
-
-div.box .title
-{
-  	border-bottom-width: 1px;
-  	border-top-width: 1px;
-  	padding: 3px;
-  	color: #143788;
-}
-
-div.box .content
-{
-  	padding: 5px;
-  	overflow: visible;
 }
 
 fieldset.container
@@ -647,25 +587,6 @@ fieldset.container
 }
 
 /*****************************
-	Home (index) page
-*****************************/
-.newsDate
-{
-    font-style: italic;
-}
-
-.newsArchive
-{
-    padding-top: 1em;
-}
-
-ul.news li.newsEntry
-{
-    padding: 0.5em 0;
-    border-bottom-width: 1px;
-}
-
-/*****************************
 	Sub-category list
 *****************************/
 .count
@@ -679,77 +600,13 @@ ul.news li.newsEntry
     font-size: larger;
 }
 
-.subCategories
-{
-    display: table;
-    margin-top: 10px;
-    border-collapse: collapse;
-    margin: 0 auto;
-}
-
-.subCategoryRow
-{
-	display: table-row;
-}
-
 .subCategoryItem
 {
-	display: table-cell;
-	border-width: 1px;
-	border-style: dotted;
-	vertical-align: middle;
-	padding: 5px;
-}
-
-.subCategoryItem.first
-{
-	border-left-width: 0;
-}
-
-.subCategoryItem.last
-{
-	border-right-width: 0;
-}
-
-.subCategoryRow.first td
-{
-	border-top-width: 0;
-}
-
-.subCategoryRow.last td
-{
-	border-bottom-width: 0;
-}
-
-.subCategories .subCatImage
-{
-	width: 85px;
-	padding: 5px;
-	padding-right: 10px;
-	display: table-cell;
-	vertical-align: middle;
-	*float: left;
-}
-
-.subCategories .details
-{
-    padding-left: 20px;
-    padding-right: 10px;
-    display: table-cell;
-    vertical-align: middle;
-	*margin-left: 85px;
-	*padding-top: 2em;
-	*padding-bottom: 1em;
-}
-
-.subCategories td.details .count
-{
-    font-weight: normal;
+	margin-bottom: 1em;
 }
 
 ul.subSubCats
 {
-    margin: 6px;
     margin-top: 12px;
 }
 
@@ -801,37 +658,6 @@ ul.subSubCats
 	margin-left: 1em;
 }
 
-.page
-{
-    border: 1px solid #143788;
-    text-decoration: none;
-    margin: 0 2px;
-    padding: 2px 6px;
-
-}
-
-.currentPage
-{
-    background: #143788;
-    color: white;
-}
-
-.resultPages .next
-{
-    background-image: url(../../image/silk/gif/resultset_next.gif);
-}
-
-.resultPages .previous
-{
-    background-image: url(../../image/silk/gif/resultset_previous.gif);
-}
-
-.resultPages
-{
-    border-top-width: 1px;
-    padding-top: 10px;
-}
-
 .resultStats
 {
     margin-bottom: 15px;
@@ -847,33 +673,6 @@ ul.subSubCats
 	width: 130px;
 }
 
-.categoryLayoutSwitch a
-{
-	width: 16px;
-	height: 16px;
-	padding: 2px;
-	border-width: 2px;
-	background-position: center center;
-	display: block;
-	float: left;
-	margin-left: 4px;
-}
-
-a.layoutSetList
-{
-	background-image: url(../../image/silk/gif/application_view_list.gif);
-}
-
-a.layoutSetGrid
-{
-	background-image: url(../../image/silk/gif/application_view_tile.gif);
-}
-
-a.layoutSetTable
-{
-	background-image: url(../../image/silk/gif/table.gif);
-}
-
 .categoryLayoutSwitch
 {
 	float: right;
@@ -885,129 +684,21 @@ a.layoutSetTable
 	display: none;
 }
 
-table.productGrid
+.productGridItem
 {
-	width: 99%;
+	text-align: center;
 	margin-bottom: 1em;
-	table-layout: fixed;
 }
 
-.productGrid td
+h3.productTitle
 {
-	padding: 1em;
-	position: relative;
-	vertical-align: bottom;
-	overflow: hidden;
-	border-width: 1px;
-}
-
-.productGrid tr.first td
-{
-	border-top-width: 0;
-}
-
-.productGrid tr.last td
-{
-	border-bottom-width: 0;
-}
-
-.productGrid td.first
-{
-	border-left-width: 0;
-}
-
-.productGrid td.last
-{
-	border-right-width: 0;
-}
-
-ul.productList li
-{
-	margin-bottom: 30px;
-}
-
-ul.productList .title
-{
-	font-size: 100%;
-}
-
-.productGrid .title
-{
-	font-size: 100%;
-	margin: 1em 0;
-}
-
-ul.productList .spec
-{
-	margin-top: 2px;
-}
-
-ul.productList .descr
-{
-    margin-left: 120px;
-}
-
-ul.productList .shortDescr
-{
-	margin-top: 0.5em;
-}
-
-ul.productList .image
-{
-    width: 110px;
-}
-
-ul.productList .order
-{
-	margin-top: 9px;
-}
-
-a.addToCart
-{
-    background-image:url(../../image/silk/gif/cart_add.gif);
-    white-space: nowrap;
+	margin-top: 0;
 }
 
 .listPrice
 {
 	text-decoration: line-through;
 	font-weight: normal;
-}
-
-ul.productList .pricingInfo
-{
-    white-space: nowrap;
-    width: 250px;
-    line-height: 1.2em;
-    margin-left: 1em;
-}
-
-.productGrid .pricingInfo
-{
-    line-height: 1.2em;
-}
-
-.productTable
-{
-	width: 100%;
-	margin-bottom: 2em;
-}
-
-.productTable td,
-.productTable th
-{
-	padding: 5px;
-	vertical-align: middle;
-}
-
-.productTable td
-{
-	text-align: center;
-}
-
-.productTable td.text
-{
-	text-align: left;
 }
 
 .productTable a.direction_asc,
@@ -1039,14 +730,23 @@ ul.productList .pricingInfo
     margin: 15px auto -7px 120px;
 }
 
-.listItemSeparator
+.productAction
 {
-	color: #ccc;
+	font-size: smaller;
 }
 
-.productListMenu
+.productAction > .actionItem:after
 {
-	margin-bottom: 1em;
+	color: #CCCCCC;
+	content: " | ";
+	display: inline-block;
+	padding: 0 2px 0 5px;
+}
+
+.productAction > .actionItem:last-child:after
+{
+	content: '';
+	padding: 0;
 }
 
 .compare
@@ -2321,12 +2021,6 @@ form
      display: inline;
 }
 
-form p
-{
-    position: relative;
-    clear: both;
-}
-
 fieldset
 {
     margin: 1em 0;
@@ -2585,11 +2279,6 @@ fieldset.eavGroup
 .dynamicMenu li
 {
 	border-collapse: collapse;
-}
-
-.dynamicMenu .content
-{
-	padding: 0 !important;
 }
 
 .dynamicMenu, .dynamicMenu ul { /* all lists */
@@ -2897,109 +2586,6 @@ h2 small
 {
 	display: none;
 }
-
-/*--------------------------------------------------
-  REQUIRED to hide the non-active tab content.
-  But do not hide them in the print stylesheet!
-  --------------------------------------------------*/
-.tabberlive .tabbertabhide {
- display:none;
-}
-
-/*--------------------------------------------------
-  .tabber = before the tabber interface is set up
-  .tabberlive = after the tabber interface is set up
-  --------------------------------------------------*/
-.tabber {
-}
-.tabberlive {
- margin-top:1em;
-}
-
-/*--------------------------------------------------
-  ul.tabbernav = the tab navigation list
-  li.tabberactive = the active tab
-  --------------------------------------------------*/
-ul.tabbernav
-{
- margin:0;
- padding: 3px 0;
- border-bottom: 1px solid #778;
- font: bold 12px Verdana, sans-serif;
-}
-
-ul.tabbernav li
-{
- list-style: none;
- margin: 0;
- display: inline;
-}
-
-ul.tabbernav li a
-{
- padding: 3px 0.5em;
- margin-left: 3px;
- border: 1px solid #778;
- border-bottom: none;
- background: #DDE;
- text-decoration: none;
-}
-
-ul.tabbernav li a:link { color: #448; }
-ul.tabbernav li a:visited { color: #667; }
-
-ul.tabbernav li a:hover
-{
- color: #000;
- background: #AAE;
- border-color: #227;
-}
-
-ul.tabbernav li.tabberactive a
-{
- background-color: #fff;
- border-bottom: 1px solid #fff;
-}
-
-/*--------------------------------------------------
-  .tabbertab = the tab content
-  Add style only after the tabber interface is set up (.tabberlive)
-  --------------------------------------------------*/
-.tabberlive .tabbertab {
- padding:5px;
- border:1px solid #aaa;
- border-top:0;
-
- /* If you don't want the tab size changing whenever a tab is changed
-    you can set a fixed height */
-
- /* height:200px; */
-
- /* If you set a fix height set overflow to auto and you will get a
-    scrollbar when necessary */
-
- /* overflow:auto; */
-}
-
-/* If desired, hide the heading since a heading is provided by the tab */
-.tabberlive .tabbertab h2 {
- display:none;
-}
-.tabberlive .tabbertab h3 {
- display:none;
-}
-
-/* Example of using an ID to set different styles for the tabs on the page */
-.tabberlive#tab1 {
-}
-.tabberlive#tab2 {
-}
-.tabberlive#tab2 .tabbertab {
- height:200px;
- overflow:auto;
-}
-
-
 
 /***************************
 	Footer panel

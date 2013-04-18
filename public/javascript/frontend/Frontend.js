@@ -4,6 +4,37 @@ var jQ = jQuery;
  *	@author Integry Systems
  */
 
+(function($) {
+	$.fn.maxHeight = function()
+	{
+		var max = 0;
+
+		this.each(function()
+		{
+			max = Math.max(max, $(this).height());
+		});
+
+		this.height(max);
+	};
+})(jQuery);
+
+jQuery(function()
+{
+	jQuery('.subCategories .thumbnail').maxHeight();
+	
+	// make product grid items even height
+	jQuery('.productGrid').each(function()
+	{
+		jQuery('.thumbnail', this).maxHeight();
+		jQuery('.image', this).maxHeight();
+		jQuery('h3', this).maxHeight();
+	});
+
+	// pagination elements
+	jQuery('ul.pagination li.disabled a').click(function(e) { e.preventDefault(); });
+	
+});
+
 ConfirmationMessage = Class.create();
 ConfirmationMessage.prototype =
 {
