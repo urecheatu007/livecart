@@ -228,28 +228,21 @@ ActiveList.prototype = {
 	{
 	   if(this.isSortable)
 	   {
-		   Sortable.destroy(this.ul);
+		   jQuery(this.ul).sortable('destroy');
 		   this.isSortable = false;
 		   $A(this.acceptFromLists).each(function(ul)
 		   {
-			   if(ActiveList.prototype.activeListsUsers[ul.id])
-			   {
-				   ActiveList.prototype.activeListsUsers[ul.id].isSortable = false;
-				   var s = Sortable.options(ul);
-
- 				   if(s)
-				   {
-					  Draggables.removeObserver(s.element);
-					  s.draggables.invoke('destroy');
-				   }
-			   }
+				if(ActiveList.prototype.activeListsUsers[ul.id])
+				{
+					ActiveList.prototype.activeListsUsers[ul.id].destroySortable();
+				}
 		   });
 	   }
 	},
 
 	makeStatic: function()
 	{
-	   Sortable.destroy(this.ul);
+	   jQuery(this.ul).sortable('destroy');
 	   Element.removeClassName(this.ul, 'activeList_add_sort')
 	   document.getElementsByClassName('activeList_icons', this.ul).each(function(iconContainer)
 	   {
@@ -261,7 +254,7 @@ ActiveList.prototype = {
 
 	makeActive: function()
 	{
-	   Sortable.create(this.ul);
+	   jQuery(this.ul).sortable();
 	   Element.addClassName(this.ul, 'activeList_add_sort')
 	   document.getElementsByClassName('activeList_icons', this.ul).each(function(iconContainer)
 	   {
@@ -348,7 +341,11 @@ ActiveList.prototype = {
 
 		var title = jQuery(container).closest('li.activeList').find('span:visible').not('.activeList_icons').html();
 
-		jQuery(container).dialog('close');
+		if (jQuery(container).data('dialog'))
+		{
+			jQuery(container).dialog('close');
+		}
+
 		jQuery(container).data('originalParent', container.parentNode).dialog(
 			{
 				autoOpen: false,
@@ -359,10 +356,10 @@ ActiveList.prototype = {
 				autoResize: true,
 				beforeClose: function(event, ui){
 					//jQuery(container).html('').data('originalParent').appendChild(container);
-			   }.bind(this),
+			   }.bind(this)
 			}).dialog('open');
 
-		Sortable.destroy(this.ul);
+		jQuery(this.ul).sortable('destroy');
 
 		// Destroy parent sortable as well
 		var parentList = this.ul.up(".activeList");
@@ -396,7 +393,10 @@ ActiveList.prototype = {
 		var container = $(container);
 		this.createSortable(true);
 
-		jQuery(container).dialog('close');
+		if (jQuery(container).dialog('isOpen'))
+		{
+			jQuery(container).dialog('close');
+		}
 
 		// Create parent sortable as well
 		var parentList = this.ul.up(".activeList");
@@ -583,14 +583,14 @@ ActiveList.prototype = {
 		switch(color)
 		{
 			case 'red':
-				new Effect.Highlight(li, {startcolor:'#FFF1F1', endcolor:'#F5F5F5'});
+				jQuery(li).effect('highlight', {color: '#F5F5F5'});
 				break;
 			case 'pink':
-				new Effect.Highlight(li, {startcolor:'#FFF7F7', endcolor:'#FBFBFB'});
+				jQuery(li).effect('highlight', {color:'#FBFBFB'});
 				break;
 			case 'yellow':
 			default:
-				new Effect.Highlight(li, {startcolor:'#FBFF85', endcolor:'#F5F5F5'});
+				jQuery(li).effect('highlight', {color:'#F5F5F5'});
 				break;
 		}
 
@@ -758,7 +758,7 @@ ActiveList.prototype = {
 			iconImage.setOpacity(this.hiddenMenuOpacity);
 			li[icon.action] = iconImage;
 
-			Event.observe(iconImage, "mousedown", function(e) { Event.stop(e) }.bind(this));
+			Event.observe(iconImage, "mousedown", function(e) { e.preventDefault() }.bind(this));
 			Event.observe(iconImage, "click", function() { this.bindAction(li, icon.action) }.bind(this));
 
 			// Append content container
@@ -926,31 +926,19 @@ ActiveList.prototype = {
 
 		if(Element.hasClassName(this.ul, this.cssPrefix + 'add_sort') && (forse || !this.isSortable))
 		{
-			Sortable.create(this.ul.id,
+			jQuery(this.ul).sortable(
 			{
-				dropOnEmpty:   true,
-				containment:   this.acceptFromLists,
-				onChange:	  function(elementObj)
+				items: ':not(.activeList_remove_sort)',
+				dropOnEmpty: true,
+				containment: this.acceptFromLists,
+				change: function(event, ui)
 				{
-					this.dragged = elementObj;
+					this.dragged = ui.item[0];
 				}.bind(this),
-				onUpdate:	  function() {
+				update: function(event, ui) {
 					setTimeout(function() { this.saveSortOrder(); }.bind(this), 1);
-				}.bind(this),
-
-				starteffect: function(){ this.scrollStart() }.bind(this),
-				endeffect: function(){ this.scrollEnd() }.bind(this)
+				}.bind(this)
 			});
-
-			// Undraggable items
-			Sortable.options(this.ul).draggables.each(function(draggable)
-			{
-				if(draggable.element.hasClassName("activeList_remove_sort"))
-				{
-					draggable.destroy();
-				}
-			});
-
 
 			this.isSortable = true;
 			$A(this.acceptFromLists).each(function(ul)
@@ -1037,17 +1025,6 @@ ActiveList.prototype = {
 		}
 	},
 
-	scrollStart: function(e)
-	{
-		var $this = this;
-		this.dragged = e;
-	},
-
-	scrollEnd: function(e)
-	{
-		clearInterval(this.scrollPoll);
-	},
-
 	/**
 	 * Display list item's menu. Show all item icons except progress
 	 *
@@ -1101,13 +1078,12 @@ ActiveList.prototype = {
 	 */
 	saveSortOrder: function()
 	{
-		var order = Sortable.serialize(this.ul.id);
+		var order = jQuery(this.ul).sortable('serialize');
 		if(order)
 		{
 			// execute the action
 			this._currentLi = this.dragged;
 			var url = this.callbacks.beforeSort.call(this, this.dragged, order);
-
 
 			if(url)
 			{

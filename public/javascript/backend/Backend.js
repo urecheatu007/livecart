@@ -447,7 +447,7 @@ Backend.Breadcrumb =
 			link.catId = parentId;
 			link.href = "#cat_" + parentId;
 			Event.observe(link, "click", function(e) {
-				Event.stop(e);
+				e.preventDefault();
 				Backend.hideContainer();
 
 				if(!Backend.Category.getNode(this.catId).length)
@@ -1095,13 +1095,13 @@ Backend.SaveConfirmationMessage.prototype =
 		this.displaying = true;
 
 		//Backend.SaveConfirmationMessage.prototype.timers[this.element.id].scrollEffect = new Effect.ScrollTo(this.element, {offset: -24});
-		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].appearEffect = new Effect.Appear(this.element, {duration: 0.4, afterFinish: this.highlight.bind(this)});
+		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].appearEffect = jQuery(this.element).show({complete: this.highlight.bind(this)});
 	},
 
 	highlight: function()
 	{
 		//this.innerElement.focus();
-		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].effectHighlight = new Effect.Highlight(this.innerElement, { duration: 0.4 });
+		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].effectHighlight = jQuery(this.innerElement).effect('highlight');
 
 		// do not hide error or permanent confirmation messages
 		if (!this.element.hasClassName('redMessage') && !this.element.hasClassName('bugMessage') && !this.element.hasClassName('stick'))
@@ -1112,7 +1112,7 @@ Backend.SaveConfirmationMessage.prototype =
 
 	hide: function()
 	{
-		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].fadeEffect = Effect.Fade(this.element, {duration: 0.4});
+		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].fadeEffect = jQuery(this.element).hide({});
 		Backend.SaveConfirmationMessage.prototype.timers[this.element.id].fadeTimeout = setTimeout(function() { this.displaying = false; }.bind(this), 4000);
 
 		if (this.options && this.options.del/* && this.options.delete !KONQUEROR */)
@@ -1200,7 +1200,7 @@ Backend.UnitConventer.prototype =
 
 		Event.observe(this.nodes.hiValue, 'keyup', function(e) { this.updateShippingWeight() }.bind(this));
 		Event.observe(this.nodes.loValue, 'keyup', function(e) { this.updateShippingWeight() }.bind(this));
-		Event.observe(this.nodes.switchUnits, 'click', function(e) { Event.stop(e); this.switchUnitTypes() }.bind(this));
+		Event.observe(this.nodes.switchUnits, 'click', function(e) { e.preventDefault(); this.switchUnitTypes() }.bind(this));
 
 		this.switchUnitTypes();
 		this.switchUnitTypes();
@@ -1308,7 +1308,10 @@ function hideForm(id)
 {
 	var container = $(id);
 
-	jQuery(container).dialog('close');
+	if (jQuery(container).data('dialog'))
+	{
+		jQuery(container).dialog('close');
+	}
 }
 
 function restoreMenu(blockId, menuId)
@@ -1943,7 +1946,12 @@ Backend.MultiInstanceEditor.prototype =
 
 	showContainer: function(container)
 	{
-		jQuery(container).dialog('close');
+		console.log('test');
+		if (jQuery(container).dialog('isOpen'))
+		{
+			jQuery(container).dialog('close');
+		}
+
 		jQuery(container).dialog(
 			{
 				autoOpen: false,
@@ -1971,7 +1979,12 @@ Backend.MultiInstanceEditor.prototype =
 		ActiveForm.prototype.resetErrorMessages(this.nodes.form);
 		//Form.restore(this.nodes.form, false, false);
 
-		jQuery($(this.getMainContainerId())).dialog('close');
+		var container = jQuery($(this.getMainContainerId()));
+		if (container.dialog('isOpen'))
+		{
+			container.dialog('close');
+		}
+
 		//Backend.hideContainer(this.getMainContainerId());
 		//this.getListContainer(this.owner).show();
 
@@ -2013,7 +2026,7 @@ Backend.MultiInstanceEditor.prototype =
 	{
 		if (e)
 		{
-			Event.stop(e);
+			e.preventDefault();
 
 			if(!e.target)
 			{
@@ -2149,7 +2162,7 @@ Backend.MultiInstanceEditor.prototype =
 		var cancel = container.down('a.cancel');
 		if (cancel)
 		{
-			Event.observe(cancel, 'click', function(e) { this.cancelAdd(); Event.stop(e); }.bind(this));
+			Event.observe(cancel, 'click', function(e) { this.cancelAdd(); e.preventDefault(); }.bind(this));
 		}
 	},
 
@@ -2168,7 +2181,7 @@ Backend.MultiInstanceEditor.prototype =
 
 	saveAdd: function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 		var instance = this.getAddInstance();
 		instance.submitForm();
 		return instance;
@@ -2229,7 +2242,7 @@ TabCustomize.prototype =
 
 	toggleMenu: function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 
 		this.moreTabsMenu.innerHTML = '';
 		var cloned = this.tabList.cloneNode(true);
@@ -2265,7 +2278,7 @@ TabCustomize.prototype =
 
 	toggleVisibility: function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 
 		var li = Event.element(e);
 		if ('LI' != li.tagName)
@@ -2321,8 +2334,8 @@ TabCustomize.prototype =
 
 Backend.initWidgets = function()
 {
-	jQuery('.fg-button').live('mouseover', function() { jQuery(this).data('isActive', jQuery(this).hasClass('ui-state-active')).addClass('ui-state-hover').removeClass('ui-state-active'); })
-	jQuery('.fg-button').live('mouseout', function()
+	jQuery(document).on('mouseover', '.fg-button', function() { jQuery(this).data('isActive', jQuery(this).hasClass('ui-state-active')).addClass('ui-state-hover').removeClass('ui-state-active'); })
+	jQuery(document).on('mouseout', '.fg-button', function()
 		{
 			jQuery(this).removeClass('ui-state-hover');
 			if (jQuery(this).data('isActive'))

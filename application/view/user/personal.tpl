@@ -5,7 +5,7 @@
 {include file="user/userMenu.tpl" current="personalMenu"}
 {include file="block/content-start.tpl"}
 
-	{form action="controller=user action=savePersonal" method="POST" handle=$form}
+	{form class="form-horizontal" action="controller=user action=savePersonal" method="POST" handle=$form class="form-horizontal"}
 
 		{input name="firstName"}
 			{label}{t _your_first_name}:{/label}
@@ -24,14 +24,7 @@
 
 		{include file="block/eav/fields.tpl" item=$user filter="isDisplayed"}
 
-		<p>
-			<label></label>
-			<input type="submit" class="submit" value="{tn _save}" />
-			<label class="cancel">
-			   {t _or} <a class="cancel" href="{link controller=user}">{t _cancel}</a>
-			</label>
-		</p>
-
+		{include file="block/submit.tpl" caption="_save" cancel="user"}
 	{/form}
 
 {include file="block/content-stop.tpl"}

@@ -22,9 +22,6 @@
 [submodule "public/javascript/library/lightbox"]
 	path = public/javascript/library/lightbox
 	url = git@dev.integry.net:vendor/lightbox
-[submodule "public/javascript/library/scriptaculous"]
-	path = public/javascript/library/scriptaculous
-	url = git://github.com/integry/scriptaculous.git
 [submodule "public/javascript/library/ajaxfilemanager"]
 	path = public/javascript/library/ajaxfilemanager
 	url = git://github.com/integry/mirror-ajaxfilemanager.git
@@ -40,3 +37,6 @@
 [submodule "library/shipping"]
 	path = library/shipping
 	url = git://github.com/integry/integry-shipping.git
+[submodule "public/bootstrap/bootstrap"]
+	path = public/bootstrap/bootstrap
+	url = git://github.com/integry/bootstrap-3-copy.git

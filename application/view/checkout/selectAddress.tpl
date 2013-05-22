@@ -13,12 +13,12 @@
 		{/if}
 	</div>
 
-	{form action="controller=checkout action=doSelectAddress" method="POST" handle=$form style="display: block; width: 100%;"}
+	{form action="controller=checkout action=doSelectAddress" method="POST" handle=$form  class="form-horizontal"}
 
-	{error for="selectedAddress"}<div><span class="errorText">{$msg}</span></div><div class="clear"></div>{/error}
+	{error for="selectedAddress"}<div><span class="text-danger">{$msg}</span></div><div class="clear"></div>{/error}
 
 	{if !$step || ('billing' == $step)}
-		<fieldset class="container" id="billingAddressColumn">
+		<div id="billingAddressColumn">
 
 			{if !'REQUIRE_SAME_ADDRESS'|config}
 				<h2 id="billingAddress">{t _billing_address}</h2>
@@ -33,7 +33,7 @@
 				</p>
 			{/if}
 
-		</fieldset>
+		</div>
 	{/if}
 
 	{if (!'REQUIRE_SAME_ADDRESS'|config && $order.isShippingRequired && !$order.isMultiAddress) && (!$step || ('shipping' == $step))}
@@ -42,13 +42,13 @@
 			<div class="clear"></div>
 		{/if}
 
-		<fieldset class="container" id="shippingSelector">
+		<div id="shippingSelector">
 
 			<h2 id="shippingAddress">{t _shipping_address}</h2>
 
 			{include file="checkout/block/selectAddress.tpl" addresses=$shippingAddresses prefix="shipping" states=$shipping_states}
 
-		</fieldset>
+		</div>
 
 		{literal}
 		<script type="text/javascript">
@@ -69,12 +69,9 @@
 	</script>
 	{/literal}
 
-	<div class="clear"></div>
+	{include file="block/submit.tpl" caption="_continue"}
 
-	<p>
-		<input type="hidden" name="step" value="{$step}" />
-		<input type="submit" class="submit" value="{tn _continue}" />
-	</p>
+	<input type="hidden" name="step" value="{$step}" />
 
 	{/form}
 

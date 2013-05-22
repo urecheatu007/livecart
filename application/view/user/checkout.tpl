@@ -26,7 +26,7 @@
 	<div class="newCustomer">
 		<h2>{t _new_cust}</h2>
 
-		{form handle=$form action="controller=user action=processCheckoutRegistration" method="POST"}
+		{form handle=$form action="controller=user action=processCheckoutRegistration" method="POST" class="form-horizontal"}
 
 			{if !'REQUIRE_SAME_ADDRESS'|config}
 				<h3>{t _contact_info}</h3>
@@ -53,11 +53,7 @@
 			{hidden name="return"}
 			{hidden name="regType"}
 
-			<p>
-				<label class="submit"></label>
-				<input type="submit" class="submit" value="{tn _continue}" />
-			</p>
-
+			{include file="block/submit.tpl" caption="_continue"}
 		{/form}
 	</div>
 	<div class="clear"></div>

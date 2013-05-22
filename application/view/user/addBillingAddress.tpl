@@ -4,16 +4,10 @@
 {include file="user/userMenu.tpl" current="addressMenu"}
 {include file="block/content-start.tpl"}
 
-	{form action="controller=user action=doAddBillingAddress" handle=$form}
+	{form action="controller=user action=doAddBillingAddress" handle=$form class="form-horizontal"}
 		{include file="user/addressForm.tpl"}
-		<p>
-			<label></label>
-			<input type="submit" class="submit" value="{tn _continue}" />
-			<label class="cancel">
-				{t _or}
-				<a class="cancel" href="{link route=$return}">{t _cancel}</a>
-			</label>
-		</p>
+
+		{include file="block/submit.tpl" caption="_continue" cancelRoute=$return class="form-horizontal"}
 	{/form}
 
 {include file="block/content-stop.tpl"}

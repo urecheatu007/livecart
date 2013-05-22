@@ -16,14 +16,14 @@
 <script type="text/javascript">
 	Event.observe("{/literal}prodImageAdd_{$ownerId}_add{literal}", "click", function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 		var form = new ActiveForm.Slide(this.up("ul"));
 		form.show("prodImageAdd", "{/literal}prodImgAdd_{$ownerId}{literal}");
 	});
 
 	Event.observe("{/literal}prodImageAdd_{$ownerId}_cancel{literal}", "click", function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 		var form = new ActiveForm.Slide(this.up("ul"));
 		form.hide("prodImageAdd", "{/literal}prodImgAdd_{$ownerId}{literal}");
 	});
@@ -39,7 +39,7 @@
 	<fieldset class="addForm">
 		<legend>{t _add_new_title}</legend>
 
-		{input name="title"}
+		{input name="image"}
 			{label}{t _image_file}:{/label}
 			{filefield}
 			<span class="maxFileSize">{maketext text=_max_file_size params=$maxSize}</span>
@@ -69,7 +69,7 @@
 	<script type="text/javascript">
 		Element.observe($('{/literal}prodImgAdd_{$ownerId}{literal}').down("a.cancel"), "click", function(e)
 		{
-			Event.stop(e);
+			e.preventDefault();
 			var form = ('{/literal}prodImgAdd_{$ownerId}{literal}');
 
 			$("{/literal}prodImageList_{$ownerId}{literal}").handler.cancelAdd();

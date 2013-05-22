@@ -11,9 +11,9 @@
 
 	<div class="clear"></div>
 
-	<form action="{link controller=checkout action=payExpressComplete}" method="post" id="expressComplete">
+	<form action="{link controller=checkout action=payExpressComplete}" method="post" id="expressComplete" class="form-horizontal">
 
-		<input type="submit" class="submit" value="{tn Complete Your Order}" />
+		{include file="block/submit.tpl" caption="_complete_now"}
 
 	</form>
 

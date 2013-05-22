@@ -1,5 +1,7 @@
 .todo { border: 1px dashed red; }
 
+.valign * { vertical-align: middle; }
+
 #topMenu ul.nav li.dropdown:hover ul.dropdown-menu
 {
     display: block;
@@ -24,15 +26,20 @@ div.btn-group ul.dropdown-menu{
     margin-top: 0px;
 }
 
+.tab-content
+{
+	padding-top: 1em;
+}
+
+.form-vertical .control-group
+{
+	margin-bottom: 10px;
+}
+
 /* resets */
 ol
 {
 	margin-left: 2em;
-}
-
-caption, th, td
-{
-	font-weight: normal;
 }
 
 .descr li,
@@ -52,17 +59,6 @@ caption, th, td
 	list-style-type: decimal;
 }
 
-body, h4
-{
-    font-family: Verdana;
-    font-size: small;
-}
-
-td
-{
-	vertical-align: top;
-}
-
 .clear
 {
     clear: both;
@@ -77,7 +73,6 @@ td
 *****************************/
 
 /* 100% width labels */
-label.checkbox, label.radio,
 .productOptions label.field,
 .productVariations label,
 .reviewForm label,
@@ -92,7 +87,6 @@ label.cancel,
 /* bold things */
 .price,
 .required label,
-.errorText,
 .eavAttributes .attrName,
 .featured .title a,
 .currentName,
@@ -101,8 +95,6 @@ label.cancel,
 .notFoundMain,
 .currentPage,
 .spec,
-.returnToCategory,
-tr.specificationGroup,
 .overallRating,
 .ratingCategoryName,
 .reviewTitle,
@@ -110,20 +102,16 @@ tr.specificationGroup,
 .readAllReviews,
 div.checkout a,
 .subTotalCalc,
-.continueShopping,
-.proceedToCheckout,
 .shipment .subTotal,
 #cart .subTotal,
 #payTotal .subTotal,
 #invoicePaymentInfo .grandTotal td.amount,
 #invoicePaymentInfo .amountDue td.amount,
 .multiAddress .shipmentAddress,
-#userMenu li.selected,
+#userMenu li.active,
 .cancelled,
 #checkoutProgress a.active,
-ul.downloadFile li.fileGroup,
-.compareData td.param,
-.compareData th a
+ul.downloadFile li.fileGroup
 {
 	font-weight: bold;
 }
@@ -131,27 +119,15 @@ ul.downloadFile li.fileGroup,
 /* red things */
 a.messages,
 .cancelled,
-a.cancel,
 .errorMsg,
-.errorText,
 .discount .actualPrice
 {
 	color: red;
 }
 
-/* auto-width select boxes */
-#language select,
-#productSort,
-.cartLinks select, select.quantity,
-#ccExpiryMonth, #ccExpiryYear, #ccType
-{
-	width: auto;
-}
-
 /* smaller input fields */
 #language select,
 .cartName small
-#productSort
 {
 	font-size: 0.85em;
 	padding: 0;
@@ -160,8 +136,6 @@ a.cancel,
 /* smaller text */
 .logout,
 .latestNewsSide .date,
-#currency, #language,
-.count,
 li.moreSubCats,
 .spec,
 .listPrice,
@@ -189,28 +163,17 @@ ul.productList .image,
 #moreImages,
 #rateProduct table td,
 .cartQuant,
-.cartPrice,
 .cartImage,
 #cartUpdate,
 #couponCodes .container,
 #checkoutProgress,
 .addressSelector .selector,
-.shipment td,
-.shipment .subTotal, #cart .subTotal,
 #invoiceHeader,
-td.amount,
 .compactProductList .image,
 .compactProductList .pricingInfo,
 .compareBoxMenu
 {
 	text-align: center;
-}
-
-/* left aligned text that needs to be overriden from right/center */
-.shipment .productName,
-.multiAddress .shipmentAddress
-{
-	text-align: justify;
 }
 
 /* right aligned text */
@@ -244,33 +207,24 @@ img.calendar_button
 }
 
 /* left floats */
-#logoContainer,
 .allFilters .filterGroup,
-.resultStats .pagingInfo,
-#productSummaryContainer,
 #ratingSummary,
 .ratingBreakdown,
 #imageContainer,
 #bundle .pricingInfo,
 .bundleList, .bundleInfo,
 .reviewIndex #ratingSummary,
-.continueShopping,
 .checkoutHeader h1,
 #billingAddressColumn,
 #shippingSelector,
-#ccForm,
 .addressContainer,
 #cvvExample,
 .newCustomer,
-#userMenuContainer,
 div.addressBlock,
-.orderDetails,
 .orderDetails .orderMenu,
 .responseUser,
 .manufacturerColumn,
 .manufacturerAttributes,
-label,
-input.radio, input.checkbox,
 #cvvHelp,
 .paymentMethods,
 .compactProductList div
@@ -279,14 +233,8 @@ input.radio, input.checkbox,
 }
 
 /* right floats */
-#topMenuContainer,
-#currency, #language,
-.resultStats .sortOptions,
-.specSummary,
 div.review .ratingBreakdown,
 .checkoutButtons,
-.proceedToCheckout,
-.completeOrderButton,
 #checkoutProgress,
 .returningCustomer,
 .noteDate,
@@ -297,32 +245,17 @@ div.review .ratingBreakdown,
 }
 
 /* links/menus with background images */
-ul.attributeList li,
-.continueShopping,
 #userMenu li,
 a.invoice, a.viewOrder, a.reorder, a.messages,
-ul.downloadFile li,
-.errorText
+ul.downloadFile li
 {
 	padding-left: 22px;
 }
 
-/* right side background images */
-#smallCart a.checkout,
-.proceedToCheckout,
-.websiteUrl a
-{
-	padding-right: 22px;
-    background-position: center right;
-}
-
 /* background color 1: light grey */
 tr.odd,
-#userMenuContainer,
-fieldset,
 div.addressBlock,
 .orderDetails,
-#productSummaryContainer,
 .noteText,
 #checkoutProgress a,
 .dynamicMenu ul,
@@ -346,14 +279,10 @@ tr.even td,
 
 /* light yellow background */
 .highlight,
-#cartFields .container, #couponCodes .container,
 span.templateLocator span.templateName,
-.proceedToCheckout,
-#couponCodes .container,
 #payTotal div,
 #testHandlerWarning,
-#checkoutProgress a.active,
-.specSummary
+#checkoutProgress a.active
 {
 	background-color: #fffccc;
 }
@@ -366,11 +295,6 @@ tr.odd td, tr.even td
 /*****************************
 	Layout
 *****************************/
-#container
-{
-  	margin: 0 auto;
-}
-
 #footer
 {
 	border-top-width: 1px;
@@ -382,42 +306,17 @@ tr.odd td, tr.even td
 {
 	overflow: visible;
 	position: relative;
-	margin-bottom: 120px;
 }
 
 #rightSide
 {
-	width: 210px;
 	display: none;
-	padding-right: 10px;
-}
-
-#content
-{
-	padding: 0 10px;
-	padding-bottom: 10px;
-}
-
-#content.left
-{
-	margin-left: 0;
-}
-
-#content.right,
-body.threeColumn #content.right
-{
-	margin-right: 0;
-	padding-right: 0;
-}
-
-body.threeColumn #content
-{
-	padding-right: 240px;
 }
 
 #content,
 #leftSide,
-#rightSide
+#rightSide,
+#userMenuContainer
 {
 	padding-top: 10px;
 }
@@ -433,42 +332,33 @@ body.threeColumn #content
 	width: 100%;
 }
 
-#topMenuContainer
-{
-	margin-right: 1em;
-}
-
-#smallCart a.checkout
-{
-	background: url(../../image/silk/gif/cart_go.gif) center right no-repeat;
-}
-
 #logoContainer
 {
 	padding: 8px;
 }
 
-fieldset.container
+#topMenuContainer
 {
-    border: 0;
+	text-align: right;
+	padding-bottom: 10px;
+}
+
+#topMenuContainer .dropdown-menu
+{
+	text-align: left;
+}
+
+#currency, #language
+{
+	margin: 5px 0 10px 10px;
 }
 
 /*****************************
-    Tables
+	Category box
 *****************************/
-.table
+.categories .nav .nav
 {
-    border-width: 1px;
-}
-
-.table th
-{
-    padding: 3px;
-}
-
-.table td
-{
-    padding: 4px;
+	margin-left: 20px;
 }
 
 /*****************************
@@ -555,46 +445,8 @@ fieldset.container
 }
 
 /*****************************
-	Currency switch
-*****************************/
-#currency, #language
-{
-	margin: 3px 3px 0;
-}
-
-#currency a, #language a
-{
-	margin-left: 3px;
-}
-
-/*****************************
-	Breadcrumb
-*****************************/
-#breadCrumb
-{
-	padding: 5px;
-}
-
-#breadCrumb *
-{
-	display: inline;
-}
-
-#breadCrumb a,
-#breadCrumb li.last
-{
-	margin: 0 7px;
-}
-
-/*****************************
 	Sub-category list
 *****************************/
-.count
-{
-    color: #666;
-    white-space: nowrap;
-}
-
 .subCatName
 {
     font-size: larger;
@@ -673,10 +525,9 @@ ul.subSubCats
 	width: 130px;
 }
 
-.categoryLayoutSwitch
+.listOptions
 {
-	float: right;
-	margin-top: -7px;
+	text-align: right;
 }
 
 .category-allProducts .categoryLayoutSwitch
@@ -749,9 +600,9 @@ h3.productTitle
 	padding: 0;
 }
 
-.compare
+#actionButtons
 {
-	padding-top: 0.5em;
+	text-align: center;
 }
 
 .compare .checkbox
@@ -764,28 +615,9 @@ h3.productTitle
 	display: inline;
 }
 
-.compareData .priceRow td.price
+ul.attributeList
 {
-	text-align: center;
-	font-size: larger;
-}
-
-.compareData div.image
-{
-	padding: 1em;
-}
-
-.compareData td, .compareData th
-{
-	padding: 3px;
-	border-width: 2px;
-}
-
-.compareBoxMenu
-{
-	padding-top: 0.5em;
-	font-weight: bold;
-	font-size: 0.85em;
+	margin-bottom: 0;
 }
 
 a.progressIndicator
@@ -798,13 +630,13 @@ a.progressIndicator
 .delete:hover
 {
 	opacity: 1;
+	text-decoration: none;
 }
 
 .delete
 {
+	color: red;
 	opacity: 0.5;
-	background-image: url(../../image/silk/gif/cancel.gif);
-	padding: 8px;
 	margin-right: 4px;
 	vertical-align: middle;
 }
@@ -812,56 +644,15 @@ a.progressIndicator
 /*****************************
 	Product page
 *****************************/
-.productIndex h1
-{
-	width: 600px;
-}
-
-.returnToCategory
-{
-    background-image: url(../../image/silk/gif/resultset_previous.gif);
-    padding-left: 18px;
-    margin-bottom: 12px;
-}
-
-.specSummary
-{
-    padding: 10px;
-    max-width: 300px;
-    margin-top: -40px;
-    z-index: 10;
-}
-
-#productSummaryContainer
-{
-	margin-top: 1em;
-}
-
-#mainInfo
-{
-    clear: right;
-    margin: 1em;
-}
-
-#productToCart input.number
-{
-	width: 3em;
-}
-
 #ratingSummary
 {
 	width: 250px;
 }
 
-#mainInfo td
+table.productDetailsTable
 {
-	padding: 5px;
-	white-space: nowrap;
-}
-
-#mainInfo td.websiteUrl
-{
-    border-top: 1px dotted black;
+	width: auto;
+	min-width: 25%;
 }
 
 .websiteUrl a
@@ -895,13 +686,6 @@ a.progressIndicator
 #mainInfo .price
 {
 	font-size: larger;
-}
-
-table.quantityPrice
-{
-	border-width: 1px;
-	margin: 1em auto;
-	clear: both;
 }
 
 .price.quantityPrice
@@ -949,11 +733,6 @@ table.quantityPrice
     padding: 5px 10px;
 }
 
-tr.specificationGroup
-{
-	font-size: larger;
-}
-
 tr.specificationGroup td.param
 {
 	border-right: 0 !important;
@@ -964,20 +743,10 @@ tr.specificationGroup td.value
 	border-left: 0 !important;
 }
 
-ul.attributeList
+ul.attributeList.singleValue
 {
-    padding: 0;
-}
-
-ul.attributeList li
-{
-    background-image: url(../../image/silk/gif/tick.gif);
-}
-
-ul.attributeList.singleValue li
-{
-    background-image: none;
-    padding: 0;
+	list-style: none;
+	margin-left: 0;
 }
 
 #imageContainer
@@ -1038,7 +807,7 @@ ul.attributeList.singleValue li
 	padding: 4px;
 }
 
-#rateProduct table .errorText
+#rateProduct table .text-danger
 {
 	position: relative;
 	white-space: nowrap;
@@ -1100,14 +869,9 @@ div.review .ratingBreakdown
 	font-size: larger;
 }
 
-.tabberlive h2
+select.quantity
 {
-	display: none;
-}
-
-.tabberlive .productSection
-{
-	padding: 1em 0;
+	width: auto;
 }
 
 /*****************************
@@ -1200,11 +964,6 @@ div.review .ratingBreakdown
 	width: 50px;
 }
 
-.continueShopping
-{
-    background-image: url(../../image/silk/gif/resultset_previous.gif);
-}
-
 .checkoutButtons
 {
     width: 300px;
@@ -1220,18 +979,8 @@ div.review .ratingBreakdown
 
 .multiAddressCheckout
 {
-	clear: right;
 	display: block;
 	padding-top: 1em;
-}
-
-.proceedToCheckout
-{
-    background-image: url(../../image/silk/gif/cart_go.gif);
-	background-position: 97% center;
-    border-width: 1px;
-    padding: 5px;
-    padding-right: 27px;
 }
 
 select.multiAddress
@@ -1247,18 +996,6 @@ select.multiAddress
 #expressCheckoutMethods img
 {
 	vertical-align: top;
-}
-
-#cartFields .container, #couponCodes .container
-{
-	padding: 0 1em 0.5em 0.5em;
-	border-width: 1px;
-	margin: 0.5em 0;
-}
-
-#couponCodes .container
-{
-	padding: 1em;
 }
 
 .text.coupon
@@ -1412,6 +1149,7 @@ td.productNameRow
 .shipment .subTotal, #cart .subTotal
 {
 	white-space: nowrap;
+	font-size: larger;
 }
 
 .subTotalCaption, .shipment td.tax
@@ -1432,9 +1170,9 @@ td.productNameRow
 }
 
 /* Payments */
-#ccForm
+.name_ccExpiryYear select
 {
-	width: 100%;
+	width: auto;
 }
 
 #ccCVV
@@ -1549,7 +1287,7 @@ tr.topLine td
 
 #miniCartContents
 {
-	padding-bottom: 0.5em;
+	padding: 10px;
 	font-size: 85%;
 }
 
@@ -1561,9 +1299,7 @@ tr.topLine td
 
 .miniCartTotal
 {
-	border-top-width: 1px;
 	text-align: center;
-	padding: 0.5em;
 }
 
 /***************************
@@ -1579,89 +1315,9 @@ tr.topLine td
 	width: 43%;
 }
 
-.returningCustomer input.text
-{
-	width: 10em;
-}
-
 .userLogin .failed
 {
     margin: 0;
-}
-
-#userMenu li
-{
-    margin-bottom: 10px;
-    background-position: bottom left;
-}
-
-#userMenu li#homeMenu
-{
-    background-image: url(../../image/silk/gif/house.gif);
-}
-
-#userMenu li#orderMenu
-{
-    background-image: url(../../image/silk/gif/package.gif);
-}
-
-#userMenu li#pendingInvoicesMenu
-{
-	background-image: url(../../image/silk/gif/money.gif);
-}
-
-#userMenu li#invoicesMenu
-{
-	background-image: url(../../image/silk/gif/money.gif);
-}
-
-#userMenu li#addressMenu
-{
-    background-image: url(../../image/silk/gif/book_addresses.gif);
-}
-
-#userMenu li#personalMenu
-{
-    background-image: url(../../image/silk/gif/user.gif);
-}
-
-#userMenu li#emailMenu
-{
-    background-image: url(../../image/silk/gif/email_edit.gif);
-}
-
-#userMenu li#fileMenu
-{
-    background-image: url(../../image/silk/gif/disk.gif);
-}
-
-#userMenu li#passwordMenu
-{
-    background-image: url(../../image/silk/gif/key.gif);
-}
-
-#userMenu li#signOutMenu
-{
-    background-image: url(../../image/silk/gif/door_out.gif);
-}
-
-#userMenu li#signOutMenu, #userMenu li#personalMenu, #userMenu li#orderMenu
-{
-	border-top-width: 1px;
-    padding-top: 10px;
-}
-
-#userMenuContainer
-{
-    padding: 10px;
-    border-width: 1px;
-    margin-bottom: 30px;
-    width: 170px;
-}
-
-.quickLogin input.text
-{
-	width: 100%;
 }
 
 /***************************
@@ -2021,58 +1677,10 @@ form
      display: inline;
 }
 
-fieldset
-{
-    margin: 1em 0;
-    padding: 1em;
-    margin: auto 0;
-    margin-bottom: 10px;
-    border-width: 1px;
-}
-
-legend
-{
-	font-size: 18px;
-	color: #30A0F9;
-	padding: 10px 0;
-	top: -22px;
-}
-
-label
-{
-	display: block;
-    width: 156px;
-    cursor: pointer;
-    padding-right: 6px;
-    padding-bottom: 1px;
-}
-
 .required label span.label
 {
 	background: url(../../image/required.gif) right center no-repeat;
 	padding-right: 9px;
-}
-
-p.radio, p.checkbox
-{
-	padding-left: 11em;
-}
-
-p.radio label, p.checkbox label
-{
-    white-space: nowrap;
-}
-
-label.checkbox, label.radio
-{
-  	line-height: 1em;
-}
-
-input.text, select, file, form.other
-{
-    width: 15em;
-    font-size: 16px;
-    padding: 2px;
 }
 
 label.cancel
@@ -2080,58 +1688,9 @@ label.cancel
     display: inline;
 }
 
-select
-{
-	padding: 0;
-}
-
-textarea
-{
-    padding: 2px;
-    width: 40em;
-    min-width: 40em;
-    height: 10em;
-    font-size: 14px;
-    color: #333;
-    max-width: 100%;
-}
-
-input.radio, input.checkbox, input.submit, input.button, input.reset
+input.submit, input.button, input.reset
 {
     width: auto;
-}
-
-input.radio, input.checkbox
-{
-    margin: 0 0.5em 0 0;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-input:focus, textarea:focus, select:focus
-{
-    background: #ffc;
-}
-
-fieldset.error, div.error, fieldset.container
-{
-	padding: 0;
-	margin: 0;
-	position: static;
-	border: 0;
-	background: none;
-}
-
-.errorText
-{
-	background-image: url(../../image/silk/gif/bullet_error.gif);
-	margin-bottom: 4px;
-}
-
-.hasError
-{
-	background-color: #FFFAFA;
-	border-color: red !important;
 }
 
 .highlight
@@ -2161,6 +1720,12 @@ fieldset.error, div.error, fieldset.container
 span.progressIndicator
 {
 	padding: 8px;
+}
+
+.glyphicon.progressIndicator
+{
+	padding: 0;
+	background-image: none;
 }
 
 input.progressIndicator.text
@@ -2364,22 +1929,6 @@ fieldset.eavGroup
 	width: auto;
 }
 
-#checkout-login,
-#checkout-shipping,
-#checkout-billing,
-#checkout-payment
-{
-	float: left;
-	width: 77%;
-}
-
-#checkout-right
-{
-	float: right;
-	width: 22%;
-	padding-left: 1%;
-}
-
 #checkout-cart #cart
 {
 	width: 100%;
@@ -2413,8 +1962,7 @@ fieldset.eavGroup
 	margin: 0 7px;
 }
 
-.onePageCheckout-index .step-disabled form,
-.onePageCheckout-index .step-disabled .form,
+/* .onePageCheckout-index .step-disabled .accordion-inner, */
 .onePageCheckout-index .notAvailable
 {
 	display: none;
@@ -2436,7 +1984,7 @@ fieldset.eavGroup
 }
 
 .onePageCheckout-index #checkout-payment form .submit,
-.onePageCheckout-index #ccForm .submit
+.onePageCheckout-index #ccForm .form-actions
 {
 	display: none !important;
 }
@@ -2459,9 +2007,7 @@ fieldset.eavGroup
 
 #checkout-place-order
 {
-	border-top-width: 1px;
 	margin: 1em 0;
-	padding-top: 1em;
 }
 
 .onePageCheckout-index .showCart #checkout-overview h2,
@@ -2471,7 +2017,6 @@ fieldset.eavGroup
 {
 	display: none;
 }
-
 
 #upsellProducts .checkProduct
 {
@@ -2513,46 +2058,18 @@ fieldset.eavGroup
 }
 
 .step-incomplete .modifyStep,
-.step.opened .modifyStep
+.step.opened .modifyStep,
+.step.closed .closed,
+.step.closed .accordion-inner,
+.step.opened .open,
+.step-disabled .modifyLink
 {
 	display: none;
 }
 
-.step.closed form,
-.step.closed div.form
+.step-disabled
 {
-	display: none !important;
-}
-
-.registerColumn input.text,
-.registerColumn select
-{
-	width: 170px;
-}
-
-.registerColumn div.input
-{
-	margin: 10px 0;
-}
-
-.step .stepTitle
-{
-	border-width: 1px;
-	border-radius: 5px;
-	line-height: 30px;
-	border-color: lightgreen;
-}
-
-.step.step-incomplete .stepTitle
-{
-	border-color: inherit;
-}
-
-.step .stepTitle h2
-{
-	margin: 0;
-	padding: 0;
-	border: 0;
+	opacity: 0.6;
 }
 
 .onePageCheckout-index .step
@@ -2562,7 +2079,7 @@ fieldset.eavGroup
 
 .stepPreview
 {
-	padding-top: 4px;
+	padding: 0 0 7px 15px;
 }
 
 .onePageCheckout-index .step.opened .stepPreview
@@ -2575,132 +2092,21 @@ fieldset.eavGroup
 	margin-right: 1em;
 }
 
-.onePageCheckout-index .completeOverview h2
+.onePageCheckout-index #checkout-right h2
 {
 	margin-top: 0;
 	padding-top: 0;
+}
+
+.amountCalculcation
+{
+	white-space: nowrap;
 }
 
 /******* tabs *********/
 h2 small
 {
 	display: none;
-}
-
-/***************************
-	Footer panel
-***************************/
-
-#footpanel
-{
-	position: fixed;
-	bottom: 0; left: 0;
-	z-index: 1000; /*--Keeps the panel on top of all other elements--*/
-	background: #e3e2e2;
-	border: 1px solid #c3c3c3;
-	border-bottom: none;
-	width: 50%;
-	margin: 0 25%;
-	-moz-border-radius: 5px 5px 0 0;
-	display: none;
-}
-
-#mainpanel
-{
-	padding: 0; margin: 0;
-	float: left;
-	width: 100%;
-	list-style: none;
-	border-top: 1px solid #fff; /*--Gives the bevel feel on the panel--*/
-	font-size: 1.1em;
-	-moz-border-radius: 5px 5px 0 0;
-}
-
-#mainpanel > li > a
-{
-	padding: 5px;
-	float: left;
-	text-indent: -9999px; /*--For text replacement - Shove text off of the page--*/
-	height: 16px; width: 16px;
-	text-decoration: none;
-	color: #333;
-	position: relative;
-}
-
-#mainpanel > li > a:hover
-{
-	background-color: #fff !important;
-}
-
-html #footpanel .subpanel ul li a.active
-{ /*--Active state when sub-panel is open--*/
-	background-color: #fff;
-	height: 17px;
-	margin-top: -2px; /*--Push it up 2px to attach the active button to sub-panel--*/
-	border: 1px solid #555;
-	border-top: none;
-	z-index: 200; /*--Keeps the active link on top of the sub-panel--*/
-	position: relative;
-}
-
-#footpanel .subpanel ul li div a { /*--Reset link style for sub-panel links--*/
-	text-indent: 0;
-	width: auto;
-	height: auto;
-	padding: 0;
-	float: none;
-	color: #00629a;
-	position: static;
-}
-
-#footpanel .subpanel ul li div a:hover
-{
-	text-decoration: underline;
-}
-
-#footpanel .subpanel
-{
-	position: absolute;
-	left: 0; bottom: 27px;
-	display: none;	/*--Hide by default--*/
-	width: 160px;
-	border: 1px solid #555;
-	background: #fff;
-	overflow: hidden;
-	z-index:60000;
-}
-
-#footpanel .subpanel h3 {
-	background: #4C5D97;
-	padding: 5px 10px;
-	color: #fff;
-	font-size: 14px;
-	cursor: pointer;
-}
-
-#footpanel .subpanel h3 span { /*--Right aligned "-" icon--*/
-	font-size: 1.5em;
-	float: right;
-	line-height: 0.6em;
-	font-weight: normal;
-}
-
-#footpanel .subpanel ul{
-	padding: 0; margin: 0;
-	background: #fff;
-	width: 100%;
-	overflow: auto;
-	padding-bottom: 2px;
-}
-
-#footpanel .subpanel li{
-	float: none; /*--Reset float--*/
-	display: block;
-	padding: 0; margin: 0;
-	overflow: hidden;
-	clear: both;
-	background: #fff;
-	position: static;  /*--Reset relative positioning--*/
 }
 
 .productRecurring td.withRadio
@@ -2848,57 +2254,4 @@ html #footpanel .subpanel ul li a.active
 #shoppingCartContainer .tablescroll_head
 {
 	margin-right: 15px;
-}
-
-/**** modal dialogs ****/
-
-.modalTitle
-{
-	font-size: 2em;
-	font-weight: bold;
- 	border-bottom-width: 1px;
-    margin-bottom: 0.5em;
-    padding-bottom: 4px;
-}
-
-.modalClose
-{
-	width: 16px;
-	height: 16px;
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	background-image: url(../../../../image/silk/cancel.png);
-	cursor: pointer;
-}
-
-.jqmWindow {
-    display: none;
-
-    position: fixed;
-    top: 17%;
-    left: 50%;
-
-    min-width: 450px;
-
-    background-color: #EEE;
-    color: #333;
-    border: 1px solid black;
-    padding: 12px;
-}
-
-.jqmOverlay { background-color: #000; }
-
-/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
-* iframe.jqm {position:absolute;top:0;left:0;z-index:-1;
-        width: expression(this.parentNode.offsetWidth+'px');
-        height: expression(this.parentNode.offsetHeight+'px');
-}
-
-/* Fixed posistioning emulation for IE6
-     Star selector used to hide definition from browsers other than IE6
-     For valid CSS, use a conditional include instead */
-* html .jqmWindow {
-     position: absolute;
-     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
 }

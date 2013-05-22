@@ -14,6 +14,11 @@ function smarty_block_label($params, $content, Smarty_Internal_Template $smarty,
 	{
 		$class = $smarty->getTemplateVars('last_fieldType') . ' ' . $params['class'];
 
+		if (strpos($class, 'checkbox') === false)
+		{
+			$class = 'control-label ' . $class;
+		}
+
 		$for = $smarty->getTemplateVars('last_fieldID');
 		if (!empty($params['for']))
 		{

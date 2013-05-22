@@ -48,11 +48,23 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 
 	$value = array_pop(array_filter(array(isset($params['value']) ? $params['value'] : '', isset($params['default']) ? $params['default'] : '', $formHandler->get($fieldName))));
 
-	unset($params['value'], $params['default']);
+	$noFormat = $params['noFormat'];
+	unset($params['value'], $params['default'], $params['noFormat']);
 
 	if (isset($params['autocomplete']) && ($params['autocomplete'] != 'off') && empty($params['id']))
 	{
 		$params['id'] = uniqid();
+	}
+
+	if (!empty($params['placeholder']))
+	{
+		$params['placeholder'] = $smarty->getApplication()->translate($params['placeholder']);
+	}
+
+	if (isset($params['autocomplete']) && $params['autocomplete'] != 'off')
+	{
+		$autocomplete = $params['autocomplete'];
+		$params['autocomplete'] = 'off';
 	}
 
 	$content = '<input';
@@ -62,7 +74,13 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 
 	$content .= ' value="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
 	$content .= '/>';
-	if (isset($params['autocomplete']) && $params['autocomplete'] != 'off')
+
+	if (!$noFormat)
+	{
+		$content = '<div class="controls">' . $content . '</div>';
+	}
+
+	if (!empty($autocomplete))
 	{
 	  	$acparams = array();
 		foreach (explode(' ', $params['autocomplete']) as $param)
@@ -75,10 +93,18 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 													  'action' => 'autoComplete',
 													  'query' => 'field=' . $acparams['field']), true);
 
-		$content .= '<span id="autocomplete_indicator_' . $params['id'] . '" class="progressIndicator" style="display: none;"></span>';
-		$content .= '<div id="autocomplete_' . $params['id'] . '" class="autocomplete"></div>';
+		if (empty($acparams['field']))
+		{
+			$acparams['field'] = 'query';
+		}
+
 		$content .= '<script type="text/javascript">
-						new Ajax.Autocompleter("' . $params['id'] . '", "autocomplete_' . $params['id'] . '", "' . $url . '", {frequency: 0.5, paramName: "' . $acparams['field'] . '", indicator: "autocomplete_indicator_' . $params['id'] . '"});
+						jQuery("#' . $params['id'] . '").typeahead({
+								source: function (query, process) {
+									return jQuery.get("' . $url . '", { ' . $acparams['field'] . ': query }, function (data) {
+										return process(jQuery.parseJSON(data));
+									});
+								}});
 					</script>';
 	}
 

@@ -1,5 +1,6 @@
 {loadJs form=true}
-{pagetitle}{t _checkout}{/pageTitle}
+{includeJs file="frontend/OnePageCheckout.js"}
+{pageTitle}{t _checkout}{/pageTitle}
 
 <noscript>
 	<meta http-equiv="refresh" content="0;{link controller=onePageCheckout action=fallback}" />
@@ -15,15 +16,9 @@
 {include file="checkout/layout.tpl"}
 {include file="block/content-start.tpl"}
 
-	<div id="checkout-right">
-		<div id="checkout-cart">
-			{$cart}
-		</div>
+<div class="row">
 
-		<div id="checkout-overview">
-			{$overview}
-		</div>
-	</div>
+	<div class="col-span-8" id="checkout-left">
 
 	{if !$user.ID}
 	<div id="checkout-login" class="step">
@@ -31,24 +26,42 @@
 	</div>
 	{/if}
 
-	<div id="checkout-billing" class="step">
-		{$billingAddress}
-	</div>
+	<div class="accordion">
 
-	<div id="checkout-shipping">
-		<div id="checkout-shipping-address" class="step">
-			{$shippingAddress}
+		<div id="checkout-billing" class="step">
+			{$billingAddress}
 		</div>
-		<div id="checkout-shipping-method" class="step">
-			{$shippingMethods}
+
+		<div id="checkout-shipping">
+			<div id="checkout-shipping-address" class="step">
+				{$shippingAddress}
+			</div>
+			<div id="checkout-shipping-method" class="step">
+				{$shippingMethods}
+			</div>
+		</div>
+
+		<div id="checkout-payment" class="step">
+			{$payment}
+		</div>
+
+	</div>
+
+	</div>
+
+	<div class="col-span-4" id="checkout-right">
+		<div id="checkout-right-inner">
+			<div id="checkout-cart">
+				{$cart}
+			</div>
+
+			<div id="checkout-overview">
+				{$overview}
+			</div>
 		</div>
 	</div>
 
-	<div id="checkout-payment" class="step">
-		{$payment}
-	</div>
-
-	<div class="clear"></div>
+</div>
 
 {include file="block/content-stop.tpl"}
 {include file="layout/frontend/footer.tpl"}

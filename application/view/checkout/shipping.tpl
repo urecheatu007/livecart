@@ -15,7 +15,7 @@
 
 	<div id="shippingSelect">
 
-		{form action="controller=checkout action=doSelectShippingMethod" method="POST" handle=$form}
+		{form action="controller=checkout action=doSelectShippingMethod" method="POST" handle=$form class="form-horizontal"}
 			{foreach from=$shipments key="key" item="shipment"}
 
 				{if $order.isMultiAddress}
@@ -35,9 +35,7 @@
 			{include file="checkout/orderFields.tpl"}
 		{/if}
 
-		<p>
-			<input type="submit" class="submit" value="{tn _continue}" />
-		</p>
+		{include file="block/submit.tpl" caption="_continue"}
 
 		{/form}
 

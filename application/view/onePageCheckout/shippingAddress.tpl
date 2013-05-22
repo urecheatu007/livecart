@@ -1,22 +1,28 @@
-<div class="stepTitle">
-	{include file="onePageCheckout/block/modifyStep.tpl"}
-	<h2><span class="step">{$steps.shippingAddress}</span>{t _shipping_address}</h2>
+<div class="accordion-group">
+	<div class="stepTitle accordion-heading">
+		{include file="onePageCheckout/block/title.tpl" title="_shipping_address"}
+	</div>
+
+	<div class="accordion-body">
+		<div class="accordion-inner">
+			{form action="controller=onePageCheckout action=doSelectShippingAddress" method="POST" handle=$form class="form-vertical"}
+				{if !$order.isMultiAddress}
+					<div class="checkbox">
+						<label>
+							{checkbox name="sameAsBilling" id="sameAsBilling"}
+							{t _the_same_as_billing_address}
+						</label>
+					</div>
+				{/if}
+
+				{include file="checkout/block/selectAddress.tpl" addresses=$shippingAddresses prefix="shipping" states=$shippingStates}
+
+				{include file="onePageCheckout/block/continueButton.tpl"}
+			{/form}
+		</div>
+
+		{if $preview_shipping}
+			<div class="stepPreview">{$preview_shipping.compact}</div>
+		{/if}
+	</div>
 </div>
-
-{form action="controller=onePageCheckout action=doSelectShippingAddress" method="POST" handle=$form}
-
-	{if !$order.isMultiAddress}
-		<p>
-			{checkbox name="sameAsBilling" id="sameAsBilling" class="checkbox"}
-			<label for="sameAsBilling" class="checkbox">{t _the_same_as_billing_address}</label>
-		</p>
-	{/if}
-
-	{include file="checkout/block/selectAddress.tpl" addresses=$shippingAddresses prefix="shipping" states=$shippingStates}
-
-	{include file="onePageCheckout/block/continueButton.tpl"}
-{/form}
-
-{if $preview_shipping}
-	<div class="stepPreview">{$preview_shipping.compact}</div>
-{/if}
