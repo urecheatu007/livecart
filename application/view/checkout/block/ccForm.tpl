@@ -5,7 +5,7 @@
 
 	{if $id}{assign var=ccId value=" id=`$id`"}{/if}
 	{assign var=controller value=$controller|default:'checkout'}
-	{form action="controller=`$controller` action=payCreditCard`$ccId`" handle=$ccForm method="POST"}
+	{form action="controller=`$controller` action=payCreditCard`$ccId`" handle=$ccForm method="POST" class="form-horizontal"}
 
 		<div id="ccForm">
 
@@ -34,25 +34,26 @@
 
 		{input name="ccExpiryYear"}
 			{label}{t _card_exp}:{/label}
-			{selectfield name="ccExpiryMonth" id="ccExpiryMonth" options=$months}
-			/
-			{selectfield name="ccExpiryYear" id="ccExpiryYear" options=$years}
+			<div class="controls">
+				{selectfield name="ccExpiryMonth" id="ccExpiryMonth" options=$months noFormat=true}
+				/
+				{selectfield name="ccExpiryYear" id="ccExpiryYear" options=$years noFormat=true}
+			</div>
 		{/input}
 
 		{input name="ccCVV"}
 			{label}{t _cvv_descr}:{/label}
-			{textfield maxlength="4" id="ccCVV"}
-			<a class="cvv" href="{link controller=checkout action=cvv}" onclick="Element.show($('cvvHelp')); return false;">{t _what_is_cvv}</a>
+			<div class="controls">
+				{textfield maxlength="4" id="ccCVV" noFormat=true}
+				<a class="cvv" href="{link controller=checkout action=cvv}" onclick="Element.show($('cvvHelp')); return false;">{t _what_is_cvv}</a>
+			</div>
 		{/input}
 
 		{if $ccVars}
 			{include file="block/eav/fields.tpl" fieldList=$ccVars.specFieldList}
 		{/if}
 
-		<p class="submit">
-			<label></label>
-			<input type="submit" class="submit" value="{tn _complete_now}" />
-		</p>
+		{include file="block/submit.tpl" caption="_complete_now"}
 
 		</div>
 	{/form}
@@ -63,7 +64,7 @@
 
 	<div class="clear"></div>
 {else}
-	{form action="controller=checkout action=payCreditCard" handle=$ccForm method="POST" id="paymentError"}
+	{form action="controller=checkout action=payCreditCard" handle=$ccForm method="POST" id="paymentError" class="form-horizontal"}
 		{error for="creditCardError"}
 			<div class="clear"></div>
 			<div class="errorMsg ccPayment">

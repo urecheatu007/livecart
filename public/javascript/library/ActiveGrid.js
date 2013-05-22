@@ -96,7 +96,7 @@ ActiveGrid.prototype =
 		var headerRow = this._getHeaderRow();
 		this.selectAllInstance = $(headerRow).down('input');
 		this.selectAllInstance.onclick = this.selectAll.bindAsEventListener(this);
-		this.selectAllInstance.parentNode.onclick = function(e){Event.stop(e);}.bindAsEventListener(this);
+		this.selectAllInstance.parentNode.onclick = function(e){e.preventDefault();}.bindAsEventListener(this);
 
 		this.ricoGrid.onUpdate = this.onUpdate.bind(this);
 		this.ricoGrid.onBeginDataFetch = this.showFetchIndicator.bind(this);
@@ -417,7 +417,7 @@ ActiveGrid.prototype =
 		this.ricoGrid.viewPort.refreshContents(this.ricoGrid.viewPort.lastRowPos);
 
 		$A(document.getElementsByName("item["+row.id+"]")).each(function(input) {
-			new Effect.Highlight($(input).up("tr"));
+			jQuery($(input).up("tr")).effect('highlight');
 		});
 	},
 
@@ -451,7 +451,11 @@ ActiveGrid.prototype =
 			jQuery(this.tableInstance).data('columnContainer', container);
 		}
 
-		jQuery(container).dialog('close');
+		if (jQuery(container).dialog('isOpen'))
+		{
+			jQuery(container).dialog('close');
+		}
+
 		jQuery(container).dialog(
 			{
 				autoOpen: false,
@@ -938,7 +942,7 @@ ActiveGridFilter.prototype =
 
 		Element.addClassName(this.element.up('th'), 'activeGrid_filter_select');
 
-		Event.stop(e);
+		e.preventDefault();
 	},
 
 	filterBlur: function()
@@ -1016,7 +1020,7 @@ ActiveGridFilter.prototype =
 
 	initFilter: function(e)
 	{
-		Event.stop(e);
+		e.preventDefault();
 
 		var element = Event.element(e);
 		if ('LI' != element.tagName && element.up('li'))
@@ -1181,7 +1185,7 @@ ActiveGrid.MassActionHandler.prototype =
 	{
 		if (e)
 		{
-			Event.stop(e);
+			e.preventDefault();
 		}
 
 		if ('delete' == this.actionSelector.value)
@@ -1278,7 +1282,7 @@ ActiveGrid.MassActionHandler.prototype =
 	{
 		this.request.request.transport.abort();
 		new LiveCart.AjaxRequest(Backend.Router.setUrlQueryParam(this.cancelUrl, 'pid', this.pid), null, this.completeCancel.bind(this));
-		Event.stop(e);
+		e.preventDefault();
 	},
 
 	completeCancel: function(originalRequest)
@@ -1455,7 +1459,11 @@ ActiveGridAdvancedSearch.prototype =
 	linkClicked: function()
 	{
 		var container = this.nodes.queryContainer;
-		jQuery(container).dialog('close');
+		if (jQuery(container).dialog('isOpen'))
+		{
+			jQuery(container).dialog('close');
+		}
+
 		jQuery(container).data('originalParent', container.parentNode).dialog(
 			{
 				autoOpen: false,
@@ -2419,7 +2427,7 @@ var forEach = function(object, block, context) {
 	SIGNATURE = "CRZ",
 	I = parseInt,
 	M = Math,
-	ie = $.browser.msie,
+	ie = false,
 	width = "width",
 	attr = "attr",
 	divClass='<div class="',
@@ -2651,14 +2659,17 @@ var forEach = function(object, block, context) {
 				t[removeClass](SIGNATURE);
 			}
 
-			if (t.w != t[width]()) {
-				t.w = t[width]();
-				for (i = 0; i < t.ln; i++)
-					mw += t.c[i].w;
-				for (i = 0; i < t.ln; i++)
-					t.c[i].css(width, M.round(1000 * t.c[i].w / mw) / 10 + "%").l = 1;
+			if (t[width])
+			{
+				if (t.w != t[width]()) {
+					t.w = t[width]();
+					for (i = 0; i < t.ln; i++)
+						mw += t.c[i].w;
+					for (i = 0; i < t.ln; i++)
+						t.c[i].css(width, M.round(1000 * t.c[i].w / mw) / 10 + "%").l = 1;
+				}
+				syncGrips(t[addClass](SIGNATURE));
 			}
-			syncGrips(t[addClass](SIGNATURE));
 		}
 	}
 

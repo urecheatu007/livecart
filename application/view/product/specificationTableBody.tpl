@@ -2,11 +2,10 @@
 
 	{if $prevAttr.$field.$group.ID != $attr.$field.$group.ID}
 		<tr class="specificationGroup heading{if $smarty.foreach.attributes.first} first{/if}">
-			<td class="param">{$attr.$field.$group.name_lang}</td>
-			<td class="value"></td>
+			<th colspan="2">{$attr.$field.$group.name_lang}</th>
 		</tr>
 	{/if}
-	<tr class="{zebra loop="attributes"}">
+	<tr>
 		<td class="param">{$attr.$field.name_lang}</td>
 		<td class="value">
 			{include file="product/attributeValue.tpl"}

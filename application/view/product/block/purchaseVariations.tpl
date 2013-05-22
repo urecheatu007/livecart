@@ -10,7 +10,7 @@
 {/if}
 
 {assign var="parentProduct" value=$product}
-{form action="controller=order action=addToCart" handle=$cartForm method="POST" class="purchaseVariations"}
+{form action="controller=order action=addToCart" handle=$cartForm method="POST" class="purchaseVariations" class="form-horizontal"}
 	{foreach $variations.products as $product}
 		<h3>{$product.variationNames|@implode:' / '}</h3>
 
@@ -36,8 +36,7 @@
 	{/foreach}
 
 	<div id="productToCart" class="cartLinks">
-		<label></label>
-		<input type="submit" class="submit" value="{tn _add_to_cart}" />
+		{include file="block/submit.tpl" caption="_add_to_cart"}
 		{hidden name="return" value=$catRoute}
 	</div>
 

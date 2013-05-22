@@ -4,13 +4,13 @@
 }
 
 	<div id="sharingSection" class="productSection sharingSection">
-		<h2>{maketext text="_share_product_name" params=$product.name_lang}</h2>
+		<h2>{maketext text="_share_product_name"}</h2>
 
 		<div id="sendToFriendRepsonse"></div>
 
 		<div id="shareProduct">
 			{form action="controller=product action=sendToFriend id=`$product.ID`" handle=$sharingForm method="POST"
-				onsubmit="new Product.Share(this); return false;" }
+				onsubmit="new Product.Share(this); return false;" class="form-horizontal"}
 				<div class="producSharingForm">
 					{input name="friendemail"}
 						{label}{t _friend_email}:{/label}
@@ -32,10 +32,7 @@
 
 				{block SEND-TO-FRIEND-SUBMIT}
 
-				<p>
-					<input class="submit" type="submit" value="{tn _send_to_friend}" /> <span class="pi" style="display: none;"></span>
-				</p>
-
+				{include file="block/submit.tpl" caption="_send_to_friend"}
 			{/form}
 		</div>
 	</div>

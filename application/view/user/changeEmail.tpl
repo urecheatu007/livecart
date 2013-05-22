@@ -4,11 +4,11 @@
 {include file="user/userMenu.tpl" current="emailMenu"}
 {include file="block/content-start.tpl"}
 
-	{form action="controller=user action=doChangeEmail" method="POST" handle=$form}
+	{form action="controller=user action=doChangeEmail" method="POST" handle=$form class="form-horizontal"}
 
 		{input}
 			{label}{t _current_email}:{/label}
-			<label class="currentEmail">{$user.email}</label>
+			<div class="controls">{$user.email}</div>
 		{/input}
 
 		{input name="email"}
@@ -16,13 +16,7 @@
 			{textfield}
 		{/input}
 
-		<p>
-			<label></label>
-			<input type="submit" class="submit" value="{tn _complete_email_change}" />
-			<label class="cancel">
-			   {t _or} <a class="cancel" href="{link controller=user}">{t _cancel}</a>
-			</label>
-		</p>
+		{include file="block/submit.tpl" caption="_complete_email_change" cancel="user"}
 
 	{/form}
 

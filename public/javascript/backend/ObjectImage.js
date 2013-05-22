@@ -143,7 +143,7 @@ Backend.ObjectImage.prototype =
 
 				if (cancel)
 				{
-					cancel.onclick = 
+					cancel.onclick =
 						function()
 						{
 							var formNode = this.parentNode;
@@ -347,13 +347,13 @@ Backend.ObjectImage.prototype =
 
 	postUpload: function(result)
 	{
-		var errorElement = document.getElementsByClassName('errorText', this.addForm)[0];
+		var errorElement = document.getElementsByClassName('text-error', this.addForm)[0];
 
 		if (result['error'])
 		{
 			errorElement.innerHTML = result['error'];
 			Element.removeClassName(errorElement, 'hidden');
-			Effect.Appear(errorElement, {duration: 0.4});
+			jQuery(errorElement).show({});
 		}
 		else
 		{

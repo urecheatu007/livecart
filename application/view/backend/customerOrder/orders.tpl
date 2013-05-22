@@ -13,14 +13,14 @@
 			{
 				Backend.CustomerOrder.prototype.createUserOrder('{/literal}{$userID}{literal}', $("{/literal}createNewOrderLink_{$orderGroupID}"), '{link controller="backend.customerOrder"}');
 				{literal}
-				Event.stop(e);
+				e.preventDefault();
 			});
 		}
 		else
 		{
 			Event.observe($("{/literal}createNewOrderLink_{$orderGroupID}{literal}"), "click", function(e)
 			{
-				Event.stop(e);
+				e.preventDefault();
 
 				Backend.CustomerOrder.prototype.customerPopup = new Backend.SelectPopup(
 					Backend.CustomerOrder.Links.selectCustomer,
@@ -83,9 +83,11 @@
 {literal}
 <script type="text/javascript">
 
+/*
 	var detailedExport = $('detailedExportContainer_{/literal}{$orderGroupID}{literal}');
 	var menu = detailedExport.up('.tabPageContainer').down('.activeGridColumns').down('.menu', 1);
 	menu.insertBefore(detailedExport, menu.firstChild);
+*/
 
 	var massHandler = new ActiveGrid.MassActionHandler($('{/literal}orderMass_{$orderGroupID}{literal}'),
 													   window.activeGrids['{/literal}orders_{$orderGroupID}{literal}'],

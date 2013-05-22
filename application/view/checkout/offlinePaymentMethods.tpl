@@ -3,12 +3,10 @@
 
 	{include file="checkout/offlineMethodInfo.tpl" method=$key}
 
-	{form action="controller=checkout action=payOffline query=id=$method" handle=$offlineForms[$method] method="POST"}
+	{form action="controller=checkout action=payOffline query=id=$method" handle=$offlineForms[$method] method="POST" class="form-horizontal"}
 		{include file="block/eav/fields.tpl" fieldList=$offlineVars[$method].specFieldList}
-		<p class="submit">
-			<label></label>
-			<input type="submit" class="submit" name="{$method}" value="{tn _complete_now}" />
-		</p>
+		{include file="block/submit.tpl" caption="_complete_now"}
+		<input type="hidden" name="{$method}" value="1" />
 	{/form}
 
 {/foreach}

@@ -31,7 +31,9 @@ function smarty_function_selectfield($params, $smarty)
 	$after = isset($params['after']) ? $params['after'] : '';
 
 	$defaultValue = isset($params['value']) ? $params['value'] : '';
-	unset($params['value'], $params['before'], $params['after']);
+	$noFormat = $params['noFormat'];
+
+	unset($params['value'], $params['noFormat'], $params['before'], $params['after']);
 
 	// Check permissions
 	if($formParams['readonly'])
@@ -84,6 +86,11 @@ function smarty_function_selectfield($params, $smarty)
 
 	$content .= $after;
 	$content .= "</select>";
+
+	if (!$noFormat)
+	{
+		$content = '<div class="controls">' . $content . '</div>';
+	}
 
 	return $content;
 }

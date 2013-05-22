@@ -8,7 +8,7 @@
 {/if}
 
 {if $filters && $FILTER_STYLE == 'FILTER_STYLE_LINKS'}
-	<div class="panel expandResults">
+	<div class="panel panel-danger expandResults">
 		<div class="panel-heading">{t _expand}</div>
 
 		<div class="content filterGroup">
@@ -23,14 +23,17 @@
 {/if}
 
 {sect}{header}
-<div class="panel narrowResults">
-	<div class="panel-heading">{t _narrow_results}</div>
+<div class="panel panel-warning narrowResults">
+	<div class="panel-heading">
+		<span class="glyphicon glyphicon-filter"></span>
+		{t _narrow_results}
+	</div>
 
 	<div class="content">
 {/header}{content}
 
 	{if 'FILTER_STYLE_CHECKBOXES' == $FILTER_STYLE}
-		<form id='multipleChoiceFilterForm' action="{categoryUrl data=$category}" method="post">
+		<form id='multipleChoiceFilterForm' action="{categoryUrl data=$category}" method="post" class="form-horizontal">
 
 		<div id="multipleChoiceFilter_top" class="hidden">
 			<input type="submit" value="{t _filter}" />

@@ -1,4 +1,4 @@
-{form action="controller=product action=rate id=`$product.ID`" handle=$ratingForm method="POST" onsubmit="new Product.Rating(this); return false;"}
+{form action="controller=product action=rate id=`$product.ID`" handle=$ratingForm method="POST" onsubmit="new Product.Rating(this); return false;" class="form-horizontal"}
 <table class="productDetailsTable">
 	<tr class="first heading">
 		<td class="param"></td>
@@ -9,7 +9,7 @@
 		<td class="ratingPreview"></td>
 	</tr>
 {foreach from=$ratingTypes item=type name=types}
-	<tr class="{zebra loop="types"}{if $smarty.foreach.types.last} last{/if}">
+	<tr>
 		<td class="param ratingCategoryName">
 			{$type.name_lang|@or:{t _default_rating_category}}
 		</td>
@@ -18,7 +18,7 @@
 			<td class="{if $smarty.section.rate.last}value{/if}">
 				{radio name="rating_`$type.ID`" value=$index onchange="Product.Rating.prototype.updatePreview(event);"}
 				{if $smarty.section.rate.last}
-					<div class="errorText hidden">{error for="rating_`$type.ID`"}{/error}</div>
+					<div class="text-danger hidden">{error for="rating_`$type.ID`"}{/error}</div>
 				{/if}
 			</td>
 		{/section}
@@ -28,7 +28,7 @@
 </table>
 
 <input type="hidden" name="rating" />
-<div class="errorText hidden">{error for="rating"}{/error}</div>
+<div class="text-danger hidden">{error for="rating"}{/error}</div>
 
 {if !'ENABLE_REVIEWS'|config || !$ratingForm|@isRequired:'nickname'}
 	<p>
@@ -54,9 +54,8 @@
 			{textarea}
 		{/input}
 	</div>
-	<p>
-		<input class="submit" type="submit" value="{tn _submit_review}" /> <span class="progressIndicator" style="display: none;"></span>
-	</p>
+
+	{include file="block/submit.tpl" caption="_submit_review"}
 {/if}
 
 {/form}

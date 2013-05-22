@@ -1,5 +1,5 @@
 <h2>{t _wish_list_items}</h2>
-<fieldset class="container" id="wishList">
+<div id="wishList">
 <table>
 	<thead>
 		<tr>
@@ -9,7 +9,7 @@
 	</thead>
 	<tbody>
 	{foreach from=$cart.wishListItems item="item" name="wishList"}
-		<tr class="{zebra loop="wishList"}">
+		<tr>
 			<td class="cartControl">
 				<a href="{link controller=order action=moveToCart id=$item.ID query="return=`$return`"}">{t _move_to_cart}</a>
 				<a href="{link controller=order action=delete id=$item.ID query="return=`$return`"}">{t _remove}</a>
@@ -32,4 +32,4 @@
 	</tbody>
 </table>
 <a href="{link route=$return}" class="continueShopping">{t _continue_shopping}</a>
-</fieldset>
+</div>

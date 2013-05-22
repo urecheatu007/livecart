@@ -15,11 +15,14 @@
 	{includeCss file="../javascript/library/tinymce/themes/advanced/css/editor_ui.css" front=true}
 	{includeCss file="backend/stat.css" front=true}
 	{includeCss file="backend/Backend.css" front=true}
-	{includeCss file="backend/theme/redmond/jquery-ui.css" front=true}
+	
+	{* includeCss file="backend/theme/redmond/jquery-ui.css" front=true *}
+	
+	{includeCss file="library/jquery/jquery-ui.css" front=true}
 	{includeCss file="library/jquery/jquery-plugins.css" front=true}
-	{compiledCss glue=true nameMethod=hash}
 
-	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+	<link href="bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet">
+	{compiledCss glue=true nameMethod=hash}
 
 	{if !'DISABLE_WYSIWYG'|config}
 		{includeJs file="library/tinymce/tiny_mce.js" inline=true}
@@ -31,20 +34,14 @@
 	{includeJs file="library/FooterToolbar.js" front=true}
 	{includeJs file="library/livecart.js" front=true}
 	{includeJs file="library/dhtmlHistory/dhtmlHistory.js"}
-	{includeJs file="library/scriptaculous/dragdrop.js" front=true}
-	{includeJs file="library/scriptaculous/slider.js" front=true}
-	{includeJs file="library/scriptaculous/controls.js" front=true}
-	{includeJs file="library/scriptaculous/builder.js" front=true}
-	{includeJs file="library/scriptaculous/effects.js" front=true}
 	{includeJs file="library/jquery/plugins.js" front=true}
 	{includeJs file="library/jquery/jquery-ui.js" front=true}
 	{includeJs file="library/jquery/jquery-min.js" front=true}
 	{includeJs file="library/prototype/prototype.js" front=true}
-
 	{includeJs file="backend/BackendToolbar.js"}
 
 	{compiledJs glue=true nameMethod=hash}
-	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+	<script src="bootstrap/bootstrap/js/bootstrap.js"></script>
 
 	{literal}
 	<script language="javascript" type="text/javascript">
