@@ -33,6 +33,81 @@ abstract class ActiveRecordModel extends ActiveRecord
 		return self::$application;
 	}
 
+	public function loadRequestModel(Request $request, $key = '')
+	{
+		$json = $request->getJSON();
+		if ($key)
+		{
+			$json = $json[$key];
+		}
+
+		$modelReq = new Request();
+		$modelReq->setValueArray($json);
+
+		if (!empty($json['attributes']) && is_array($json['attributes']))
+		{
+			foreach ($json['attributes'] as $key => $value)
+			{
+				if (!empty($value['valueIDs']))
+				{
+					foreach (json_decode($value['valueIDs']) as $valueID)
+					{
+						$modelReq->set('specItem_' . $valueID, 'on');
+					}
+
+					if (!empty($value['newValues']))
+					{
+						foreach (json_decode($value['newValues']) as $newVal)
+						{
+							$others = $modelReq->get('other', array());
+							$others[$key][] = $newVal;
+							$modelReq->set('other', $others);
+						}
+					}
+
+					$modelReq->set('removeEmpty_' . $key, 'on');
+				}
+				else if (isset($value['ID']))
+				{
+					$modelReq->set('specField_' . $key, $value['ID']);
+					if (!empty($value['newValue']))
+					{
+						$others = $modelReq->get('other', array());
+						$others[$key] = $value['newValue'];
+						$modelReq->set('other', $others);
+					}
+				}
+				else
+				{
+					$modelReq->set('specField_' . $key, $value['value']);
+					foreach (self::getApplication()->getLanguageArray() as $lang)
+					{
+						if (!empty($value['value_' . $lang]))
+						{
+							$modelReq->set('specField_' . $key . '_' . $lang, $value['value_' . $lang]);
+						}
+					}
+				}
+			}
+		}
+
+		$this->loadRequestData($modelReq);
+	}
+
+	public static function getRequestInstance(Request $request, $field = 'ID')
+	{
+		$data = $request->getJSON();
+		return ActiveRecordModel::getInstanceByID(get_called_class(), $data[$field], true);
+	}
+
+	public static function updateFromRequest(Request $request)
+	{
+		$instance = self::getRequestInstance($request);
+		$instance->loadRequestModel($request);
+
+		return $instance;
+	}
+
 	/**
 	 *  Note that the form may not always contain all the fields of the model, so we must always
 	 *  make sure that the data for the particular field has actually been submitted to avoid
@@ -335,6 +410,7 @@ abstract class ActiveRecordModel extends ActiveRecord
 		if ($this->specificationInstance && ($this->specificationInstance instanceof EavSpecificationManager) && (empty($array['attributes']) || $force))
 		{
 			$array['attributes'] = $this->specificationInstance->toArray();
+			$array['attributes']['markAsJSONObject'] = true;
 			EavSpecificationManager::sortAttributesByHandle('EavSpecificationManager', $array);
 		}
 

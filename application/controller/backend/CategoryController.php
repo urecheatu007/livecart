@@ -2,7 +2,7 @@
 
 ClassLoader::import("application.controller.backend.abstract.StoreManagementController");
 ClassLoader::import("application.model.category.Category");
-
+ClassLoader::import("application.model.presentation.CategoryPresentation");
 ClassLoader::import("application.model.product.Product");
 
 /**
@@ -17,8 +17,12 @@ class CategoryController extends StoreManagementController
 {
 	public function index()
 	{
+		Category::loadTree();
 		$response = new ActionResponse();
-		$response->set('categoryList', $this->getRootCategoryJson());
+
+		$categories = array('children' => array($this->getRecursiveJson(Category::getRootNode()->toArray())));
+
+		$response->set('categoryList', json_encode($categories));
 		$response->set('allTabsCount', array(Category::ROOT_ID => $this->getTabCounts(Category::ROOT_ID)));
 		$response->set('maxUploadSize', ini_get('upload_max_filesize'));
 		$response->set('defaultCurrencyCode', $this->application->getDefaultCurrencyCode());
@@ -39,19 +43,9 @@ class CategoryController extends StoreManagementController
 
 		$this->loadLanguageFile('backend/Settings');
 
-		$category = Category::getInstanceByID($this->request->get("id"), Category::LOAD_DATA);
+		$category = Category::getRootNode();
 		$form = $this->buildForm($category);
 		$response = new ActionResponse("catalogForm", $form);
-
-		$categoryArr = $category->toArray();
-		$form->setData($categoryArr);
-		$response->set("categoryId", $categoryArr['ID']);
-
-		$set = $category->getRelatedRecordSet('CategoryPresentation', new ARSelectFilter());
-		if ($set->size())
-		{
-			$form->setData($set->get(0)->toFlatArray());
-		}
 
 		$response->set('themes', array_merge(array(''), LiveCartRenderer::getThemeList()));
 
@@ -67,6 +61,35 @@ class CategoryController extends StoreManagementController
 		return $response;
 	}
 
+	public function category()
+	{
+		$category = Category::getInstanceByID($this->request->get('id'), true);
+		$category->loadSpecification();
+		$arr = $category->toArray();
+
+		$set = $category->getRelatedRecordSet('CategoryPresentation', new ARSelectFilter());
+		if ($set->size())
+		{
+			$arr['presentation'] = $set->get(0)->toFlatArray();
+		}
+
+		return new JSONResponse($arr);
+	}
+
+	/**
+	 * Add form
+	 *
+	 * @role !category.create
+	 *
+	 * @return ActionRedirectResponse
+	 */
+	public function add()
+	{
+		$response = new BlockResponse();
+		$response->set('form', $this->buildAddForm());
+		return $response;
+	}
+
 	/**
 	 * Creates a new category record
 	 *
@@ -76,17 +99,13 @@ class CategoryController extends StoreManagementController
 	 */
 	public function create()
 	{
-		$parent = Category::getInstanceByID((int)$this->request->get("id"));
+		$parent = Category::getRequestInstance($this->request, 'parent');
 
 		$categoryNode = Category::getNewInstance($parent);
-		$categoryNode->setValueByLang("name", $this->application->getDefaultLanguageCode(), 'dump' );
+		$categoryNode->loadRequestModel($this->request);
 		$categoryNode->save();
 
-		$categoryNode->setValueByLang("name", $this->application->getDefaultLanguageCode(), $this->translate("_new_category") . " " . $categoryNode->getID() );
-
-		$categoryNode->save();
-
-		return new JSONResponse($categoryNode->toArray(), 'success');
+		return new JSONResponse($this->getCategoryJson($categoryNode->toArray()), 'success', $this->translate('_new_category_was_successfully_created'));
 	}
 
 	/**
@@ -100,32 +119,20 @@ class CategoryController extends StoreManagementController
 	{
 		ClassLoader::import('application.model.presentation.CategoryPresentation');
 
-		$categoryNode = Category::getInstanceByID($this->request->get("id"), Category::LOAD_DATA);
+		$categoryNode = Category::getRequestInstance($this->request);
 		$validator = $this->buildValidator($categoryNode);
-		if($validator->isValid())
+		if($validator->isModelValid())
 		{
-			$categoryNode->loadRequestData($this->request);
+			$categoryNode->loadRequestModel($this->request);
 			$categoryNode->save();
 
 			// presentation
 			$instance = CategoryPresentation::getInstance($categoryNode);
-			$instance->loadRequestData($this->request);
+			$instance->loadRequestModel($this->request, 'presentation');
 			$instance->save();
 
 			return new JSONResponse($categoryNode->toFlatArray(), 'success', $this->translate('_category_succsessfully_saved'));
 		}
-	}
-
-	/**
-	 * Debug method: outputs category tree structure
-	 *
-	 */
-	public function viewTree()
-	{
-		$response = new RawResponse(Category::getInstanceByID(ActiveTreeNode::ROOT_ID, true)->toString());
-		$response->setHeader('Content-type', 'text/plain');
-
-		return $response;
 	}
 
 	/**
@@ -215,23 +222,15 @@ class CategoryController extends StoreManagementController
 	 *
 	 * @role !category.sort
 	 */
-	public function reorder()
+	public function move()
 	{
 		$targetNode = Category::getInstanceByID((int)$this->request->get("id"));
-		$parentNode = Category::getInstanceByID((int)$this->request->get("parentId"));
+		$parentNode = Category::getInstanceByID((int)$this->request->get("parent"));
+		$next = $this->request->get("next") ? Category::getInstanceByID((int)$this->request->get("next")) : null;
 
 		try
 		{
-			if($direction = $this->request->get("direction", false))
-			{
-				if(ActiveTreeNode::DIRECTION_LEFT == $direction) $targetNode->moveLeft(false);
-				if(ActiveTreeNode::DIRECTION_RIGHT == $direction) $targetNode->moveRight(false);
-			}
-			else
-			{
-				$targetNode->moveTo($parentNode);
-			}
-
+			$targetNode->moveTo($parentNode, $next);
 			Category::reindex();
 			Category::recalculateProductsCount();
 
@@ -241,8 +240,6 @@ class CategoryController extends StoreManagementController
 		{
 			return new JSONResponse(false, 'failure', $this->translate('_unable_to_reorder_categories_tree'));
 		}
-
-		return new JSONResponse($status);
 	}
 
 	public function countTabsItems()
@@ -309,7 +306,7 @@ class CategoryController extends StoreManagementController
 			return array();
 		}
 
-		$jscat = array('data' => $cat['name_lang'], 'id' => $cat['ID'], 'attr' => array('id' => $cat['ID']), 'state' => 'closed');
+		$jscat = array('title' => $cat['name_lang'], 'id' => $cat['ID'], 'attr' => array('id' => $cat['ID']), 'state' => 'closed');
 		if ($cat['rgt'] - $cat['lft'] == 1)
 		{
 			$jscat['children'] = null;
@@ -366,6 +363,29 @@ class CategoryController extends StoreManagementController
 	public function reindex()
 	{
 		ActiveTreeNode::reindex("Category");
+	}
+
+	/**
+	 * Builds a category form validator
+	 *
+	 * @return RequestValidator
+	 */
+	private function buildAddValidator()
+	{
+		$validator = $this->getValidator("category", $this->request);
+		$validator->addCheck("name", new IsNotEmptyCheck($this->translate("Category name should not be empty")));
+
+		return $validator;
+	}
+
+	/**
+	 * Builds a category form instance
+	 *
+	 * @return Form
+	 */
+	private function buildAddForm()
+	{
+		return new Form($this->buildAddValidator());
 	}
 
 	/**

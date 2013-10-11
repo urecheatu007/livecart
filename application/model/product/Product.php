@@ -75,7 +75,7 @@ class Product extends MultilingualObject
 
 		$schema->registerField(new ARField("isEnabled", ARBool::instance()));
 		$schema->registerField(new ARField("sku", ARVarchar::instance(20)));
-		$schema->registerField(new ARField("name", ARArray::instance()));
+		$schema->registerField(new ARField("name", ARArray::instance())); // ->setValidation('required')
 		$schema->registerField(new ARField("shortDescription", ARArray::instance()));
 		$schema->registerField(new ARField("longDescription", ARArray::instance()));
 		$schema->registerField(new ARField("keywords", ARText::instance()));
@@ -88,7 +88,7 @@ class Product extends MultilingualObject
 		$schema->registerField(new ARField("isFeatured", ARBool::instance()));
 		$schema->registerField(new ARField("type", ARInteger::instance(4)));
 
-		$schema->registerField(new ArField("ratingSum", ARInteger::instance()));
+		$schema->registerField(new ArField("ratingSum", ARInteger::instance()));//->protect();
 		$schema->registerField(new ArField("ratingCount", ARInteger::instance()));
 		$schema->registerField(new ArField("rating", ARFloat::instance(8)));
 		$schema->registerField(new ArField("reviewCount", ARInteger::instance()));
@@ -369,26 +369,23 @@ class Product extends MultilingualObject
 		return $this->stockCount->get();
 	}
 
-	private function loadPricingFromRequest(Request $request, $listPrice = false)
+	private function loadPricingFromRequest(Request $request, $listPrice = false, $removeMissing = false)
 	{
-		$field = $listPrice ? 'listPrice' : 'price';
-
-		$currencies = self::getApplication()->getCurrencyArray();
-		foreach ($currencies as $currency)
+		$prices = $request->get('defined' . ($listPrice ? 'listPrice' : ''));
+		foreach (self::getApplication()->getCurrencyArray() as $currency)
 		{
-			$price = $request->get($field . '_' . $currency);
-			if (strlen($price))
+			if (isset($prices[$currency]) && strlen($prices[$currency]))
 			{
-				$this->setPrice($currency, $price, $listPrice);
+				$this->setPrice($currency, $prices[$currency], $listPrice);
 			}
-			else if ($request->isValueSet($field . '_' . $currency))
+			else if ($removeMissing)
 			{
 				$this->getPricingHandler()->removePriceByCurrencyCode($currency, $listPrice);
 			}
 		}
 	}
 
-	public function loadRequestData(Request $request)
+	public function loadRequestData(Request $request, $removeMissingPrices = true)
 	{
 		// basic data
 		parent::loadRequestData($request);
@@ -399,16 +396,31 @@ class Product extends MultilingualObject
 		}
 
 		// set manufacturer
-		if ($request->isValueSet('manufacturer'))
+		if ($man = $request->get('Manufacturer'))
 		{
-			$this->manufacturer->set(Manufacturer::getInstanceByName($request->get('manufacturer')));
+			$this->manufacturer->set(!empty($man['name']) ? Manufacturer::getInstanceByName($man['name']) : null);
 		}
 
 		$this->getSpecification()->loadRequestData($request);
 
 		// set prices
-		$this->loadPricingFromRequest($request);
-		$this->loadPricingFromRequest($request, true);
+		$this->loadPricingFromRequest($request, false, $removeMissingPrices);
+		$this->loadPricingFromRequest($request, true, $removeMissingPrices);
+
+		if ($quantities = $request->get('quantityPrice'))
+		{
+			foreach ($this->getRelatedRecordSet('ProductPrice', new ARSelectFilter()) as $price)
+			{
+				$id = $price->currency->get()->getID();
+				if (!empty($quantities[$id]['serializedRules']))
+				{
+					$prices = $quantities[$id]['serializedRules'];
+					ksort($prices);
+					$price->serializedRules->set(serialize($prices));
+					$price->save();
+				}
+			}
+		}
 	}
 
 	/**

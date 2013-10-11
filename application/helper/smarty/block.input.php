@@ -10,9 +10,10 @@
  */
 function smarty_block_input($params, $content, Smarty_Internal_Template $smarty, &$repeat)
 {
+	$formParams = $smarty->_tag_stack[0][1];
+
 	if (!$repeat)
 	{
-		$formParams = $smarty->_tag_stack[0][1];
 		$formHandler = $formParams['handle'];
 		$isRequired = $formHandler ? $formHandler->isRequired($params['name']) : false;
 
@@ -35,16 +36,36 @@ function smarty_block_input($params, $content, Smarty_Internal_Template $smarty,
 			{
 				$content = '<label ' . $matches[3] . '><input ' . $matches[1] . ' /> ' . $matches[4] . '</label>';
 			}
-
-			//var_dump($matches);
 		}
 
-		$content = '<div class="control-group ' . ($msg ? 'has-error' : '') .  ' name_' . $params['name'] . ' ' . $fieldType . ' ' . ($isRequired ? ' required' : '') . (!empty($params['class']) ? ' ' . $params['class'] : '' ) . '">' .
-						$content .
-						'<div class="text-danger' . ($msg ? '' : ' hidden') . '">' . $msg . '</div>
-					</div>';
+		$name = $params['name'];
+		$class = !empty($params['class']) ? ' ' . $params['class'] : ' ';
+		unset($params['name'], $params['class']);
+
+		$c = $content;
+		$content = '<div class="row ' . ($msg ? 'has-error' : '') .  ' name_' . $name . ' type_' . $fieldType . ' ' . ($isRequired ? ' required' : '') . $class . '"';
+
+		foreach ($params as $n => $param)
+		{
+			$content .= ' ' . $n . '="' . $param . '"';
+		}
+
+		$content .= '>' . $c;
+
+		foreach ($smarty->getFieldValidation($name, $formHandler) as $val)
+		{
+			$content .= '<div ng-show="isSubmitted && form.' . $name . '.$error.' . substr($val[0], 3) . '" class="text-danger">' . $val[1] . '</div>';
+		}
+
+		if ($msg)
+		{
+			$content .= '<div class="text-danger">' . $msg . '</div>';
+		}
+
+		$content .= '</div>';
 
 		$smarty->assign('last_fieldType', '');
+		$smarty->assign('input_name', '');
 
 		return $content;
 	}
