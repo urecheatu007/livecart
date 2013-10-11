@@ -1,3 +1,8 @@
+[ng-cloak]
+{
+	display: none;
+}
+
 *
 {
   	margin: 0;
@@ -35,12 +40,43 @@ img[src=""]
 a, a:visited
 {
   	color: darkblue;
+  	cursor: pointer;
 }
 
 h1
 {
 	margin-bottom: 3px;
 	font-size: 1.5em;
+}
+
+/***************************
+	Bootstrap extensions
+***************************/
+.btn.btn-mini
+{
+	font-size: 11px;
+	padding: 3px 7px;
+}
+
+.modal
+{
+	overflow: visible;
+}
+
+.modal-body
+{
+	overflow: auto;
+}
+
+.modal-dialog
+{
+	left: 0;
+	width: inherit;
+}
+
+div.controls
+{
+	display: inline-block;
 }
 
 /***************************
@@ -83,7 +119,6 @@ div.tip div {
   	background-color: #FFFD8C;
   	display: inline;
 	width: auto;
-/*	background-image: url(../../image/backend/icon/information.png); */
 	background-repeat: no-repeat;
 	background-position: 5px center;
 	margin-right: 10px;
@@ -199,7 +234,7 @@ html, body{
 #pageContentContainer
 {
     position: relative;
-	min-height: 100%; /* needed for footer positioning*/
+	min-height: 500px; /* needed for footer positioning*/
 }
 
 
@@ -745,7 +780,7 @@ br.clear, div.clear
 	border-bottom: none;
 	width: 94%;
 	margin: 0 3%;
-	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
 }
 
 #mainpanel
@@ -756,7 +791,7 @@ br.clear, div.clear
 	list-style: none;
 	border-top: 1px solid #fff; /*--Gives the bevel feel on the panel--*/
 	font-size: 1.1em;
-	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
 }
 
 #footpanel ul li.dropButton
@@ -1006,7 +1041,22 @@ html #footpanel .subpanel ul li a.active
 ***************************/
 form
 {
-     display: inline;
+    display: inline;
+}
+
+label
+{
+	font-weight: normal;
+}
+
+.form-horizontal .row.type_checkbox
+{
+	margin-top: 0;
+}
+
+.required label
+{
+	font-weight: bold;
 }
 
 .ui-dialog form
@@ -1020,10 +1070,9 @@ form
     display: none;
 }
 
-form p, form div.field
+form .row
 {
-    position: relative;
-    clear: both;
+	margin: 0;
 }
 
 fieldset.error, div.error, fieldset.container
@@ -1087,13 +1136,14 @@ form fieldset.group div
 
 fieldset
 {
-    margin: 1em 0;
-    padding: 1em;
-    background: #fbfbfb;
-    margin: auto 0;
-    margin-bottom: 10px;
-    border: 1px solid #DDD;
-    position: relative;
+	margin: 1em 0;
+	padding: 1em;
+	padding-top: 0;
+	background: #fbfbfb;
+	margin: auto 0;
+	margin-bottom: 10px;
+	border: 1px solid #DDD;
+	position: relative;
 }
 
 legend
@@ -1105,34 +1155,7 @@ legend
 	background-color: #fff;
 	border: 1px solid #ddd;
 	font-family: "Trebuchet MS";
-}
-
-label
-{
-    float: left;
-    width: 170px;
-    font-size: 14px;
-    overflow: hidden;
-    padding-bottom: 1px;
-}
-
-div.input.checkbox input.checkbox
-{
-	margin-left: 156px;
-	float: none;
-}
-
-div.input label
-{
-	float: none;
-	display: inline-block;
-	vertical-align: top;
-}
-
-div.input input,
-div.input select
-{
-	vertical-align: middle;
+	margin-bottom: 0;
 }
 
 label.cancel
@@ -1155,60 +1178,9 @@ label.cancel
 	display: inline-block;
 }
 
-html[xmlns] .clearfix {
-	display: block;
-}
-
-* html .clearfix {
-	height: 1%;
-}
-
-p.required label, fieldset.required label, label.required
-{
-  	font-weight: bold;
-}
-
-p.radio, p.checkbox, fieldset.radio, fieldset.checkbox
-{
-   padding-left: 170px;
-}
-
-p.radio label, p.checkbox label, fieldset.radio label, fieldset.checkbox label
-{
-    white-space: nowrap;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-input, select, file, form.other
-{
-    width: 15em;
-    font-size: 16px;
-    padding: 2px;
-    vertical-align: middle;
-    margin-bottom: 0;
-}
-
 option
 {
 	padding-right: 1em;
-}
-
-select
-{
-    width: 15.5em;
-}
-
-select.country option, select.state option
-{
-   width: 15em;
-}
-
-label.checkbox, label.radio, p.checkbox label
-{
-    cursor: pointer;
-    width: auto;
-    padding-left: 0;
 }
 
 optgroup option
@@ -1226,22 +1198,7 @@ optgroup
 
 textarea, .disabledTextarea
 {
-    padding: 2px;
-    width: 40em;
-    height: 10em;
-    font-size: 14px;
-    font-family: arial, verdana;
-    color: #333;
-}
-.feedback_textarea
-{
-   line-height: 10em;
-}
-
-input.radio, input.checkbox, input.submit, input.button, input.reset, input.file, input.upload, input[type=checkbox]
-{
-    width: auto;
-    vertical-align: middle;
+    height: 7em;
 }
 
 input.submit, input.reset
@@ -1249,7 +1206,7 @@ input.submit, input.reset
 	font-size: 10px;
 	padding: 3px;
 	font-weight: bold;
-	-moz-border-radius: 5px;
+	border-radius: 5px;
 	border-width: 0;
 }
 
@@ -1270,12 +1227,6 @@ input.text.progressIndicator
 {
 	padding: 2px;
 	background-position: center right;
-}
-
-input.radio, input.checkbox, .progressIndicator.checkbox
-{
-    float: left;
-    margin-right: 0.5em;
 }
 
 input:focus, textarea:focus, select:focus
@@ -1302,17 +1253,6 @@ form, .formDiv
 {
     height: 2em;
     width: 11em;
-}
-
-label, input, select, form .other, textarea, .disabledTextarea
-{
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-select
-{
-    padding: 0 !important;
 }
 
 a.cancel, a.menu
@@ -1364,30 +1304,10 @@ a.progressIndicator
 	height: 15px;
 }
 
-/* textarea container */
-div.textarea,
-.multiValueSelect,
-.input-append.date,
-span.mceEditor
-{
- 	margin-bottom: 7px;
- 	display: inline-block;
- 	vertical-align: top;
-}
-
-input.wide
-{
-  	width: 35em;
-}
-
-.wider
-{
-	width: 50em;
-}
-
 input.money, input.number
 {
-  	width: 5em;
+  	width: 7em;
+  	display: inline;
 }
 
 input.date
@@ -1424,28 +1344,24 @@ td.param
 	margin: 0;
 }
 
-.UnitConventer_HiUnit
-{
-	margin-right: 8px;
-}
-
-.UnitConventer_SwitchUnits
-{
-	font-size: smaller;
-}
-
-.UnitConventer_Root input
-{
-	width: 2em;
-}
-
-a.UnitConventer_SwitchUnits
+.unitConverter a
 {
 	font-size: 11px;
 	display: block;
 	color: red;
-	margin-top: -3px;
 	margin-bottom: 5px;
+}
+
+.unitConverter input
+{
+	width: 4em;
+	display: inline-block;
+	margin-right: 6px;
+}
+
+.unitConverter span
+{
+	margin-right: 6px;
 }
 
 .fieldDescription
@@ -1608,6 +1524,11 @@ fieldset.group p
 /***************************
 	Tabs
 ***************************/
+.tab-content
+{
+	padding: 1em;
+}
+
 .tabContainer
 {
 	position: relative;
@@ -1676,255 +1597,6 @@ fieldset.group p
 {
 	text-align: center;
 	padding: 5em;
-}
-
-/**************************
-	Translation tabs
-***************************/
-.languageForm
-{
-    margin-top: 1em;
-    margin-bottom: 0;
-    border: 0px none;
-    background-color: transparent;
-    padding: 0;
-    position: relative;
-    width: 100%;
-    z-index: 200;
-}
-
-.languageFormCaption
-{
-    margin-right: 10px;
-    display: inline;
-    padding: 0.5em 1em 0.5em 1em ! important;
-    vertical-align: middle;
-    font-size: smaller;
-}
-
-.languageTabsContainer
-{
-   height: 30px;
-   position: relative;
-   z-index: 10;
-}
-
-ul.languageFormTabs
-{
-    height: 21px;
-    width: 100%;
-    display: block;
-	position: absolute;
-	white-space: nowrap;
-	overflow: hidden;
-	padding-top: 10px;
-}
-
-ul.languageFormTabs li
-{
-	list-style-type: none;
-}
-
-ul.languageFormTabs li.langTab
-{
-    display: inline;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-bottom: 0px;
-    background-color: #f5f5f5;
-    margin-left: 2px;
-    padding: 4px ! important;
-    padding-bottom: 3px !important;
-    font-size: 12px;
-}
-
-ul.languageFormTabs li.langTab:hover, ul.languageFormTabs li.langTab.active
-{
-    border-top: 2px solid red;
-    background-color: #fafafa;
-}
-
-ul.languageFormTabs li.langTab.active
-{
-    background-color: #FDFDFD;
-    font-weight: bold;
-	position: relative;
-	z-index: 50;
-	padding-bottom: 4px !important;
-}
-
-.languageFormContent
-{
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #FDFDFD;
-    position: relative;
-}
-
-.languageFormContainer
-{
-     display: none;
-}
-
-.languageFormContainer.active
-{
- 	display: block;
-}
-
-.languageTabsContainer li.moreTabs
-{
-	background-color: #FDFDFD;
-	position: absolute;
-	z-index: 60;
-	right: 0;
-	top: 0;
-	height: 25px;
-	padding: 0 !important;
-	padding-left: 20px !important;
-	width: auto !important;
-}
-
-.tabContainer ul li.moreTabs.inactive
-{
-	border: 0;
-}
-
-.languageTabsContainer li.moreTabs li
-{
-	display: none;
-}
-
-.languageTabsContainer li.moreTabs li.langTab
-{
-	display: block;
-}
-
-li.langTab.hidden
-{
-	display: none !important;
-}
-
-.moreTabs .moreLink
-{
-	line-height: 30px;
-}
-
-.moreTabsMenu li.hidden
-{
-	display: block !important;
-}
-
-.moreTabsMenu li
-{
-	white-space: nowrap;
-	padding: 3px !important;
-}
-
-li.moreTabs
-{
-	border: 0;
-	position: relative;
-	padding-left: 3px !important;
-	padding-right: 3px !important;
-	padding-bottom: 3px !important;
-	right: 0;
-	top: -2px;
-	background-color: #fff;
-	margin-right: 0;
-	list-style: none;
-}
-
-li.moreTabs a.moreTabsLink
-{
-	font-size: 0.75em;
-	text-decoration: none;
-}
-
-a.moreTabsLink span
-{
-	text-decoration: underline;
-}
-
-a.moreTabsLink span.downArrow
-{
-	text-decoration: none;
-	font-size: 1.1em;
-}
-
-li.moreTabs a
-{
-	font-weight: bold;
-	font-size: 0.85em;
-	text-decoration: underline;
-}
-
-li.moreTabs ul
-{
-	height: auto !important;
-	padding: 0 !important;
-}
-
-li.moreTabs li
-{
-	float: none !important;
-	border: 0 !important;
-	background: #fff !important;
-	display: block !important;
-	margin-right: 0 !important;
-	font-weight: normal !important;
-}
-
-.tabContainer ul li.moreTabs li
-{
-	font-size: 0.85em !important;
-	padding-left: 10px !important;
-}
-
-li.moreTabs .moreTabsMenu
-{
-	position: absolute;
-	left: 0;
-	z-index: 100;
-	border: 1px solid #aaa;
-	background-color: #fff;
-}
-
-.moreTabsMenu ul.tabList
-{
-	height: auto !important;
-	max-height: 1000px !important;
-}
-
-li.moreTabs li:hover
-{
-	text-decoration: line-through;
-}
-
-li.moreTabs li, li.moreTabs li *, li.moreTabs li.hidden:hover
-{
-	color: #000;
-	text-decoration: none;
-}
-
-li.moreTabs li:hover
-{
-	background-color: #eee !important;
-}
-
-li.moreTabs .moreTabs
-{
-	display: none !important;
-}
-
-li.moreTabs li.hidden a,
-li.moreTabs li:hover a
-{
-	text-decoration: line-through;
-}
-
-li.moreTabs li.hidden:hover a
-{
-	text-decoration: none;
 }
 
 /***************************
@@ -2107,7 +1779,7 @@ legend,
 .activeGrid_massActionProgress .container,
 .wizardProgress li
 {
-	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
 li.activeList_even, li.activeList_odd,
@@ -2118,25 +1790,25 @@ div.yellowMessage div, div.redMessage div, div.bugMessage div,
 .activeGrid .filterMenu,
 #langMenu
 {
-	-moz-border-radius: 7px;
+	border-radius: 7px;
 }
 
 ul.languageFormTabs li, .tabList li, .tabs li
 {
-	-moz-border-radius-topleft: 4px;
-	-moz-border-radius-topright: 4px;
+	border-radius-topleft: 4px;
+	border-radius-topright: 4px;
 }
 
 #nav li ul
 {
-	-moz-border-radius-bottomleft: 6px;
-	-moz-border-radius-bottomright: 6px;
+	border-radius-bottomleft: 6px;
+	border-radius-bottomright: 6px;
 }
 
 #loginContainer,
 #pageContainer
 {
-	-moz-border-radius: 1em;
+	border-radius: 1em;
 }
 
 /***************************
@@ -2180,14 +1852,14 @@ a.external
 	right: 1em;
 	top: 1em;
 	background: url(../../image/backend/confirmationBackground.png);
-	-moz-border-radius: 6px;
+	border-radius: 6px;
 	z-index: 10000;
 }
 
 .quickEditOuterContainer
 {
 	background-color: #eff;
-	-moz-border-radius: 0 0 10px 10px;
+	border-radius: 0 0 10px 10px;
 	border-top-width: 0;
 	padding: 0.5em;
 }
@@ -2272,12 +1944,6 @@ table.qeProducts td{
 	Quick search
 *************************/
 
-#SettingsSearchContainer,
-#QuickSearchContainer
-{
-	width: 320px;
-}
-
 #QuickSearchQuery
 {
 	width: 230px;
@@ -2307,7 +1973,7 @@ table.qeProducts td{
 #SettingsSearchResult,
 #SettingsSearchQuery
 {
-	width:250px !important;
+	width: 100%;
 }
 
 .qsPaginate
@@ -2324,7 +1990,7 @@ table.qeProducts td{
 	width: 224px;
 	border-width: 1px;
 	border: 1px solid #ccc;
-	-moz-border-radius: 10px;
+	border-radius: 10px;
 	z-index:200 !important;
 	text-align: left;
 	padding: 7px;
@@ -2414,7 +2080,7 @@ a.deleteCross
  margin-left:5px;
  background:#666;
  color:#fff;
- -moz-border-radius: 10px;
+ border-radius: 10px;
  }
 #ttbot {
 display:block;
@@ -2517,6 +2183,12 @@ button.fg-button { width:auto; overflow:visible; }
 
 /**** modal dialogs ****/
 
+/* todo: recheck when dialogOpenClass option is available in Angularui-bootstrap (v0.5?) */
+.modal
+{
+	display: block;
+}
+
 .modalTitle
 {
 	font-size: 2em;
@@ -2572,4 +2244,44 @@ button.fg-button { width:auto; overflow:visible; }
 .jstree > ul > li
 {
 	margin-top: 5px;
+}
+
+/* ng-grid */
+.ngCell .editColumn
+{
+	padding: 3px;
+}
+
+/* ya-tree */
+.tree
+{
+	overflow: auto;
+}
+
+.tree li
+{
+	list-style-type: none;
+}
+
+.tree ul
+{
+	list-style-type: none;
+	margin-left: 20px;
+}
+
+.tree .minimized-true ul
+{
+	display: none;
+}
+
+.tree ins.expand
+{
+	margin-left: -20px;
+}
+
+.tree li div
+{
+	display: inline-block;
+	cursor: pointer;
+	white-space: nowrap;
 }

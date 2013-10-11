@@ -71,12 +71,6 @@ li.addProduct
   	width: 100%;
 }
 
-.cell_cb
-{
-/*	width: 4% !important; */
-	text-align: center !important;
-}
-
 .cell_cb input
 {
 	float: none;
@@ -151,19 +145,26 @@ li.addProduct
 /********************
 	Pricing
 *********************/
-.priceRow div.input
+.productForm .pricing .row
 {
-	display: inline;
+    margin-top: 5px;
 }
 
-.priceRow div.input.basePrice
+.priceRow .row
 {
-	margin-right: 1em;
+	display: inline-block;
+	margin: 0;
+}
+
+.priceRow
+{
+	white-space: nowrap;
 }
 
 .productForm .pricing label
 {
 	width: auto;
+	min-width: 70px;
 }
 
 a.setQuantPrice
@@ -173,48 +174,43 @@ a.setQuantPrice
 	font-size: 11px;
 }
 
-div.quantityPricing
+quantity-price table
 {
-	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
-.quantityPricing table
-{
-	border: 1px solid #eee;
-}
-
-div.quantityPricing .quantityLabel,
-div.quantityPricing .groupLabel
+quantity-price .quantityLabel,
+quantity-price .groupLabel
 {
 	font-size: smaller;
 	font-weight: bold;
 }
 
-div.quantityPricing .quantityLabel
+quantity-price .quantityLabel
 {
 	float: right;
 	margin-bottom: 10px;
 	padding-top: 10px;
 }
 
-div.quantityPricing .groupLabel
+quantity-price .groupLabel
 {
 	margin-top: 24px;
 	float: left;
 	padding-left: 5px;
 }
 
-.quantityPricing select
+quantity-price select
 {
 	width: 150px;
 }
 
-.quantityPricing td
+quantity-price td
 {
 	padding: 0 2px;
 }
 
-.quantityPricing .number
+quantity-price .number
 {
 	width: 50px;
 	font-size: smaller;

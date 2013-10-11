@@ -42,14 +42,14 @@ function smarty_function_checkbox($params, $smarty)
 	}
 	$fieldName = $params['name'];
 
-	if (!isset($params['id']))
-	{
-	  	$params['id'] = $params['name'];
-	}
-
 	if(!isset($params['value']))
 	{
 		$params['value'] = 1;
+	}
+
+	if (!empty($formParams['model']))
+	{
+		$params['ng-model'] = $formParams['model'] . '.' . $params['name'];
 	}
 
 	// Check permissions
@@ -81,6 +81,9 @@ function smarty_function_checkbox($params, $smarty)
 	{
 		unset($params['checked']);
 	}
+
+	$params['ng-true-value'] = 1;
+	$params['ng-false-value'] = 0;
 
 	$output = '<input type="checkbox"';
 	foreach ($params as $name => $value)

@@ -17,7 +17,8 @@ function smarty_function_textarea($params, $smarty)
 		$params['name'] = $smarty->getTemplateVars('input_name');
 	}
 
-	if (empty($params['id']))
+	// @todo: can be removed when all TinyMCE editors are instantiated via Angular
+	if (empty($params['id']) && empty($params['tinymce']))
 	{
 		$params['id'] = uniqid();
 	}
@@ -26,18 +27,37 @@ function smarty_function_textarea($params, $smarty)
 	$formHandler = $formParams['handle'];
 	$fieldName = $params['name'];
 
+	if (empty($params['ng_model']) && !empty($formParams['model']))
+	{
+		$params['ng-model'] = $formParams['model'] . '.' . $params['name'];
+		unset($params['ng_model']);
+	}
+
+	$params = $smarty->applyFieldValidation($params, $formHandler);
+
+	if (!empty($params['tinymce']))
+	{
+		if (is_bool($params['tinymce']))
+		{
+			$params['tinymce'] = 'getTinyMceOpts()';
+		}
+
+		$params['ui-tinymce'] = $params['tinymce'];
+		unset($params['tinymce']);
+	}
+
 	// Check permissions
 	if($formParams['readonly'])
 	{
 		$params['readonly'] = 'readonly';
 	}
 
-	$content = '<div class="controls"><textarea';
-	foreach ($params as $name => $param) {
-		$content .= ' ' . $name . '="' . $param . '"';
-	}
+	$content = '<textarea';
+	$content = $smarty->appendParams($content, $params);
 
-	$content .= '>' . htmlspecialchars($formHandler->get($fieldName), ENT_QUOTES, 'UTF-8') . '</textarea></div>';
+	$content .= '>' . htmlspecialchars($formHandler->get($fieldName), ENT_QUOTES, 'UTF-8') . '</textarea>';
+
+	$content = $smarty->formatControl($content, $params);
 
 	return $content;
 }

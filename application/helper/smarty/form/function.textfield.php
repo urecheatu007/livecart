@@ -40,6 +40,18 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 		$params['type'] = 'text';
 	}
 
+	if (isset($params['ng_model']))
+	{
+		$params['ng-model'] = $params['ng_model'];
+		unset($params['ng_model']);
+	}
+	else if (!empty($formParams['model']))
+	{
+		$params['ng-model'] = $formParams['model'] . '.' . $params['name'];
+	}
+
+	$params = $smarty->applyFieldValidation($params, $formHandler);
+
 	// Check permissions
 	if($formParams['readonly'])
 	{
@@ -48,8 +60,7 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 
 	$value = array_pop(array_filter(array(isset($params['value']) ? $params['value'] : '', isset($params['default']) ? $params['default'] : '', $formHandler->get($fieldName))));
 
-	$noFormat = $params['noFormat'];
-	unset($params['value'], $params['default'], $params['noFormat']);
+	unset($params['value'], $params['default']);
 
 	if (isset($params['autocomplete']) && ($params['autocomplete'] != 'off') && empty($params['id']))
 	{
@@ -68,17 +79,11 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 	}
 
 	$content = '<input';
-	foreach ($params as $name => $param) {
-		$content .= ' ' . $name . '="' . $param . '"';
-	}
-
+	$content = $smarty->appendParams($content, $params);
 	$content .= ' value="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
 	$content .= '/>';
 
-	if (!$noFormat)
-	{
-		$content = '<div class="controls">' . $content . '</div>';
-	}
+	$content = $smarty->formatControl($content, $params);
 
 	if (!empty($autocomplete))
 	{
@@ -98,6 +103,7 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 			$acparams['field'] = 'query';
 		}
 
+		/*
 		$content .= '<script type="text/javascript">
 						jQuery("#' . $params['id'] . '").typeahead({
 								source: function (query, process) {
@@ -106,6 +112,7 @@ function smarty_function_textfield($params, Smarty_Internal_Template $smarty)
 									});
 								}});
 					</script>';
+		*/
 	}
 
 	return $content;

@@ -22,29 +22,62 @@ ClassLoader::import('application.model.tax.TaxClass');
  */
 class ProductController extends ActiveGridController implements MassActionInterface
 {
-	private $isQuickEdit = false;
-	private $quickEditValidation = false;
-
     public function index()
+	{
+		$response = new ActionResponse();
+
+		return $response;
+	}
+
+    public function category()
 	{
 		ClassLoader::import('application.LiveCartRenderer');
 
 		$category = Category::getInstanceByID($this->request->get("id"), Category::LOAD_DATA);
 
-		$response = new ActionResponse();
-		$response->set('categoryID', $category->getID());
+		$response = array();
+		$response = $this->lists()->getValue();
+		$response['options'] = $this->getGridOptions();
+
+		/*
 		$response->set('currency', $this->application->getDefaultCurrency()->getID());
 		$response->set('themes', array_merge(array(''), LiveCartRenderer::getThemeList()));
 		$response->set('shippingClasses', $this->getSelectOptionsFromSet(ShippingClass::getAllClasses()));
 		$response->set('taxClasses', $this->getSelectOptionsFromSet(TaxClass::getAllClasses()));
 		$response->set('attributes', $category->getSpecificationFieldArray());
+		*/
 
-		$this->setGridResponse($response);
+		return new JSONResponse($response);
+	}
 
-		$path = $this->getCategoryPathArray($category);
-		$response->set('path', $path);
+	public function edit()
+	{
+		$response = $this->productForm(true);
 
 		return $response;
+	}
+
+	public function get()
+	{
+		$product = Product::getInstanceByID($this->request->get('id'), true, array('Manufacturer'));
+
+		$product->loadSpecification();
+		$product->loadPricing();
+
+		$arr = $product->toArray();
+
+		foreach ($product->getRelatedRecordSetArray('ProductPrice', new ARSelectFilter()) as $price)
+		{
+			$arr['quantityPrice'][$price['currencyID']] = $price;
+		}
+
+		return new JSONResponse($arr);
+	}
+
+	public function getPresentation()
+	{
+		$product = Product::getInstanceByID($this->request->get('id'), true);
+		return new JSONResponse(CategoryPresentation::getInstance($product)->toArray());
 	}
 
 	protected function getPreparedRecord($row, $displayedColumns)
@@ -142,11 +175,6 @@ class ProductController extends ActiveGridController implements MassActionInterf
 
 	protected function getColumnValue($product, $class, $field)
 	{
-		if ($class == 'hiddenType')
-		{
-			return $product['type'];
-		}
-
 		$value = '';
 
 		if ('Product' == $class)
@@ -238,8 +266,8 @@ class ProductController extends ActiveGridController implements MassActionInterf
 				else
 				{
 					$values = is_array($this->request->get('filters')) ? $this->request->get('filters') : json_decode($this->request->get('filters'), true);
-					$values = isset($values[$column]) ? $values[$column] : null; 
-					
+					$values = isset($values[$column]) ? $values[$column] : null;
+
 					if ($values)
 					{
 						foreach (ActiveRecordModel::getRecordSet('SpecFieldValue', select(in(f('SpecFieldValue.ID'), explode(',', urldecode($values))))) as $field)
@@ -261,8 +289,6 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		// load specification data
 		foreach ($displayedColumns as $column => $type)
 		{
-			if($column == 'hiddenType') continue;
-
 			list($class, $field) = explode('.', $column, 2);
 			if ('specField' == $class)
 			{
@@ -360,14 +386,14 @@ class ProductController extends ActiveGridController implements MassActionInterf
 			$id = array_pop(explode('_', $act));
 			$field = SpecField::getInstanceByID($id, true);
 			$a = substr($act, 0, 3);
-			
+
 			$request = clone $this->request;
 			foreach ($request->toArray() as $key => $value)
 			{
 				if (substr($key, 0, 18) == 'checkbox_specItem_')
 				{
 					$item = substr($key, 9);
-					
+
 					if (!$request->isValueSet($item))
 					{
 						$request->remove($key);
@@ -379,7 +405,7 @@ class ProductController extends ActiveGridController implements MassActionInterf
 					}
 				}
 			}
-			
+
 			$params['field'] = $field;
 			$params['request'] = $request;
 		}
@@ -491,7 +517,6 @@ class ProductController extends ActiveGridController implements MassActionInterf
 	{
 		$availableColumns['Manufacturer.name'] = 'text';
 		$availableColumns['ProductPrice.price'] = 'numeric';
-		$availableColumns['hiddenType'] = 'numeric';
 
 		return $availableColumns;
 	}
@@ -558,12 +583,12 @@ class ProductController extends ActiveGridController implements MassActionInterf
 	protected function getDisplayedColumns(Category $category)
 	{
 		// product ID is always passed as the first column
-		return parent::getDisplayedColumns($category, array('hiddenType' => 'numeric'));
+		return parent::getDisplayedColumns($category);
 	}
 
 	protected function getDefaultColumns()
 	{
-		return array('Product.ID', 'hiddenType','Product.sku', 'Product.name', 'Manufacturer.name', 'ProductPrice.price', 'Product.stockCount', 'Product.isEnabled');
+		return array('Product.ID','Product.sku', 'Product.name', 'Manufacturer.name', 'ProductPrice.price', 'Product.stockCount', 'Product.isEnabled');
 	}
 
 	public function autoComplete()
@@ -693,7 +718,7 @@ class ProductController extends ActiveGridController implements MassActionInterf
 	 */
 	public function update()
 	{
-	  	$product = Product::getInstanceByID($this->request->get('id'), ActiveRecordModel::LOAD_DATA);
+	  	$product = Product::getRequestInstance($this->request);
 	  	$product->loadPricing();
 	  	$product->loadSpecification();
 
@@ -702,15 +727,8 @@ class ProductController extends ActiveGridController implements MassActionInterf
 
 	public function basicData()
 	{
-		ClassLoader::import('application.LiveCartRenderer');
-		ClassLoader::import('application.model.presentation.CategoryPresentation');
-
 		$product = Product::getInstanceById($this->request->get('id'), ActiveRecord::LOAD_DATA, array('DefaultImage' => 'ProductImage', 'Manufacturer', 'Category'));
 		$product->loadSpecification();
-
-		$response = $this->productForm($product);
-		$response->set('counters', $this->countTabsItems()->getData());
-		$response->set('themes', array_merge(array(''), LiveCartRenderer::getThemeList()));
 
 		$set = $product->getRelatedRecordSet('CategoryPresentation', new ARSelectFilter());
 		if ($set->size())
@@ -719,7 +737,6 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		}
 
 		// pricing
-
 		$f = new ARSelectFilter(new NotEqualsCond(new ARFieldHandle('Currency', 'isDefault'), true));
 		$f->setOrder(new ARFieldHandle('Currency', 'position'));
 		$otherCurrencies = array();
@@ -732,84 +749,31 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		$response->set("otherCurrencies", $otherCurrencies);
 		$response->set("baseCurrency", $this->application->getDefaultCurrency()->getID());
 		$productForm = $response->get('productForm');
-		// $response->set("pricingForm", $pricingForm);
-
-		// get user groups
-		$f = new ARSelectFilter();
-		$f->setOrder(new ARFieldHandle('UserGroup', 'name'));
-		$groups[0] = $this->translate('_all_customers');
-		foreach (ActiveRecordModel::getRecordSetArray('UserGroup', $f) as $group)
-		{
-			$groups[$group['ID']] = $group['name'];
-		}
-		$groups[''] = '';
-		$response->set('userGroups', $groups);
 
 		// all product prices in a separate array
 		$prices = array();
 		foreach ($product->getRelatedRecordSetArray('ProductPrice', new ARSelectFilter()) as $price)
 		{
 			$prices[$price['currencyID']] = $price;
-			$productForm->/*$pricingForm->*/set('price_' . $price['currencyID'], $price['price']);
-			$productForm->/*$pricingForm->*/set('listPrice_' . $price['currencyID'], $price['listPrice']);
+			$productForm->set('price_' . $price['currencyID'], $price['price']);
+			$productForm->set('listPrice_' . $price['currencyID'], $price['listPrice']);
 		}
 		$response->set('prices', $prices);
-
-		if ($this->isQuickEdit == false) // viewing in quick edit form does not add to last viewed.
-		{
-			BackendToolbarItem::registerLastViewedProduct($product);
-		}
 
 		return $response;
 	}
 
-	private function pricingInformation(Product $product)
+	public function specFields()
 	{
-		// $this->locale->translationManager()->loadFile('backend/Product');
-		// $product = Product::getInstanceByID($this->request->get('id'), ActiveRecord::LOAD_DATA, ActiveRecord::LOAD_REFERENCES);
+		$form = new Form($this->getValidator('specField'));
+		$product = Product::getInstanceByID((int)$this->request->get('id'), ActiveRecord::LOAD_DATA);
+		$product->loadSpecification();
 
-		// $pricingForm = $this->buildPricingForm($product);
-
-		$f = new ARSelectFilter(new NotEqualsCond(new ARFieldHandle('Currency', 'isDefault'), true));
-		$f->setOrder(new ARFieldHandle('Currency', 'position'));
-		$otherCurrencies = array();
-		foreach (ActiveRecordModel::getRecordSetArray('Currency', $f) as $row)
-		{
-			$otherCurrencies[] = $row['ID'];
-		}
-
-		$response = new ActionResponse();
-		$response->set("product", $product->toFlatArray());
-		$response->set("otherCurrencies", $otherCurrencies);
-		$response->set("baseCurrency", $this->application->getDefaultCurrency()->getID());
-		$response->set("pricingForm", $pricingForm);
-
-		// get user groups
-		$f = new ARSelectFilter();
-		$f->setOrder(new ARFieldHandle('UserGroup', 'name'));
-		$groups[0] = $this->translate('_all_customers');
-		foreach (ActiveRecordModel::getRecordSetArray('UserGroup', $f) as $group)
-		{
-			$groups[$group['ID']] = $group['name'];
-		}
-		$groups[''] = '';
-		$response->set('userGroups', $groups);
-
-		// all product prices in a separate array
-		$prices = array();
-		foreach ($product->getRelatedRecordSetArray('ProductPrice', new ARSelectFilter()) as $price)
-		{
-			$prices[$price['currencyID']] = $price;
-			$pricingForm->set('price_' . $price['currencyID'], $price['price']);
-			$pricingForm->set('listPrice_' . $price['currencyID'], $price['listPrice']);
-		}
-
-		$response->set('prices', $prices);
-
+		$response = new BlockResponse('form', $form);
+		$product->getSpecification()->setFormResponse($response, $form);
+		$product->getSpecification()->setValidation($form->getValidator());
 		return $response;
 	}
-
-
 
 	public function countTabsItems()
 	{
@@ -905,10 +869,10 @@ class ProductController extends ActiveGridController implements MassActionInterf
 	private function save(Product $product)
 	{
 		ClassLoader::import('application.model.presentation.CategoryPresentation');
-		$validator = $this->buildValidator($product);
-		if ($validator->isValid())
+		$validator = $this->buildValidator(true);
+		if ($validator->isModelValid())
 		{
-			$product->loadRequestData($this->request);
+			$product->loadRequestModel($this->request);
 
 			foreach (array('ShippingClass' => 'shippingClassID', 'TaxClass' => 'taxClassID') as $class => $field)
 			{
@@ -986,14 +950,7 @@ class ProductController extends ActiveGridController implements MassActionInterf
 				}
 			}
 
-			// $product->loadRequestData($this->request);
-			// $product->save();
-
-			if ($this->isQuickEdit == false)
-			{
-				BackendToolbarItem::registerLastViewedProduct($product);
-			}
-			$response = $this->productForm($product);
+			$response = $this->productForm(true);
 
 			$response->setHeader('Cache-Control', 'no-cache, must-revalidate');
 			$response->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
@@ -1010,50 +967,15 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		}
 	}
 
-	private function productForm(Product $product)
+	private function productForm($isExisting)
 	{
-		$productFormData = $product->toArray();
+		ClassLoader::import('application.LiveCartRenderer');
+		ClassLoader::import('application.model.presentation.CategoryPresentation');
 
-		if($product->isLoaded())
-		{
-			$product->loadSpecification();
-			$productFormData = array_merge($productFormData, $product->getSpecification()->getFormData());
+		$response = new BlockResponse();
+		$response->set('themes', array_merge(array(''), LiveCartRenderer::getThemeList()));
 
-			if (isset($productFormData['Manufacturer']['name']))
-			{
-				$productFormData['manufacturer'] = $productFormData['Manufacturer']['name'];
-			}
-		}
-		else
-		{
-			$product->load(ActiveRecord::LOAD_REFERENCES);
-		}
-
-		$product->loadPricing();
-
-		$form = $this->buildForm($product);
-		$pricing = $product->getPricingHandler();
-
-		$pricesData = $product->toArray();
-		$listPrices = $pricing->toArray(ProductPricing::DEFINED, ProductPricing::LIST_PRICE);
-		$pricesData['shippingHiUnit'] = (int)$pricesData['shippingWeight'];
-		$pricesData['shippingLoUnit'] = ($pricesData['shippingWeight'] - $pricesData['shippingHiUnit']) * 1000;
-
-		if(array_key_exists('defined', $pricesData))
-		{
-			foreach ($pricesData['calculated'] as $currency => $price)
-			{
-				$pricesData['price_' . $currency] = isset($pricesData['defined'][$currency]) ? $pricesData['defined'][$currency] : '';
-				$productFormData['price_' . $currency] = $pricesData['price_' . $currency];
-			}
-		}
-
-		foreach ($listPrices as $currency => $price)
-		{
-			$pricesData['listPrice_' . $currency] = $price;
-		}
-
-		$form->setData($productFormData);
+		$form = $this->buildForm($isExisting);
 
 		// status values
 		$status = array(0 => $this->translate('_disabled'),
@@ -1068,19 +990,9 @@ class ProductController extends ActiveGridController implements MassActionInterf
 			Product::TYPE_RECURRING => $this->translate('_recurring')
 		);
 
-		// default product type
-		if (!$product->isLoaded())
-		{
-			$product->type->set(substr($this->config->get('DEFAULT_PRODUCT_TYPE'), -1));
-			$form->set('type', $product->type->get());
-		}
+		//$product->type->set(substr($this->config->get('DEFAULT_PRODUCT_TYPE'), -1));
 
-		$response = new ActionResponse();
-		$product->getSpecification()->setFormResponse($response, $form);
-		$response->set("cat", $product->getCategory()->getID());
-		$response->set("hideFeedbackMessage", $this->request->get("afterAdding") == 'on');
 		$response->set("productForm", $form);
-		$response->set("path", $product->getCategory()->getPathNodeArray(true));
 		$response->set("productTypes", $types);
 		$response->set("productStatuses", $status);
 		$response->set("baseCurrency", $this->application->getDefaultCurrency()->getID());
@@ -1088,12 +1000,16 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		$response->set("shippingClasses", $this->getSelectOptionsFromSet(ShippingClass::getAllClasses()));
 		$response->set("taxClasses", $this->getSelectOptionsFromSet(TaxClass::getAllClasses()));
 
-		$productData = $product->toArray();
-		if (empty($productData['ID']))
+		// get user groups
+		$f = new ARSelectFilter();
+		$f->setOrder(new ARFieldHandle('UserGroup', 'name'));
+		$groups[0] = $this->translate('_all_customers');
+		foreach (ActiveRecordModel::getRecordSetArray('UserGroup', $f) as $group)
 		{
-			$productData['ID'] = 0;
+			$groups[$group['ID']] = $group['name'];
 		}
-		$response->set("product", $productData);
+		$groups[''] = '';
+		$response->set('userGroups', $groups);
 
 		return $response;
 	}
@@ -1120,40 +1036,35 @@ class ProductController extends ActiveGridController implements MassActionInterf
 	 *
 	 * @return RequestValidator
 	 */
-	public function buildValidator(Product $product)
+	public function buildValidator($isExisting)
 	{
 		$validator = $this->getValidator("productFormValidator", $this->request);
 
 		$validator->addCheck('name', new IsNotEmptyCheck($this->translate('_err_name_empty')));
 
 		// check if SKU is entered if not autogenerating
-		if ($this->request->get('save') && !$product->isExistingRecord() && !$this->request->get('autosku'))
+		if ($this->request->get('save') && !$isExisting && !$this->request->get('autosku'))
 		{
 			$validator->addCheck('sku', new IsNotEmptyCheck($this->translate('_err_sku_empty')));
 		}
 
 		// check if entered SKU is unique
-		if ($this->request->get('sku') && $this->request->get('save') && (!$product->isExistingRecord() || ($this->request->isValueSet('sku') && $product->getFieldValue('sku') != $this->request->get('sku'))))
+		if ($this->request->get('sku') && $this->request->get('save') && (!$isExisting || ($this->request->isValueSet('sku') && $product->getFieldValue('sku') != $this->request->get('sku'))))
 		{
 			ClassLoader::import('application.helper.check.IsUniqueSkuCheck');
-			$validator->addCheck('sku', new IsUniqueSkuCheck($this->translate('_err_sku_not_unique'), $product));
+			//$validator->addCheck('sku', new IsUniqueSkuCheck($this->translate('_err_sku_not_unique'), $product));
 		}
 
 		// validate price input in all currencies
-		if(!$product->isExistingRecord())
+		if(!$isExisting)
 		{
 			self::addPricesValidator($validator);
 			self::addShippingValidator($validator);
 			self::addInventoryValidator($validator);
 		}
 
-		if($this->isQuickEdit)
-		{
-			// nothing now
-		} else {
-			// quick edit forms does not have specification fields
-			$product->getSpecification()->setValidation($validator);
-		}
+		//$product->getSpecification()->setValidation($validator);
+
 		self::addPricesValidator($validator);
 		self::addShippingValidator($validator);
 		self::addInventoryValidator($validator);
@@ -1161,66 +1072,32 @@ class ProductController extends ActiveGridController implements MassActionInterf
 		return $validator;
 	}
 
-	public function quickEdit()
-	{
-		$this->isQuickEdit = true;
-
-		$this->loadQuickEditLanguageFile();
-		$request = $this->getRequest();
-		$response = $this->basicData();
-		return $response;
-	}
-
-	public function isQuickEdit()
-	{
-		return true;
-	}
-
-	public function saveQuickEdit()
-	{
-		$this->isQuickEdit = true;
-		$this->quickEditValidation = true;
-
-		$response = $this->update(true);
-		if($response instanceof JSONResponse)
-		{
-			return $response;
-		}
-		$product = $response->get('product');
-		$displayedColumns = $this->getRequestColumns();
-		$r = array(
-			'data'=> $this->recordSetArrayToListData(array($product), $displayedColumns),
-			'columns'=>array_keys($displayedColumns)
-		);
-		return new JSONResponse($r, 'success');
-	}
-	
 	public function massActionField()
 	{
 		$field = SpecField::getInstanceByID($this->request->get('id'), true);
 		$array = $field->toArray();
-		
+
 		if ($field->isSelector())
 		{
 			$array['values'] = array();
-			
+
 			foreach ($field->getValuesList() as $val)
 			{
 				$array['values'][$val['ID']] = $val['value_lang'];
 			}
 		}
-		
+
 		$response = new ActionResponse('field', $array);
 		$response->set('form', new Form($this->getValidator('massActionField')));
 		return $response;
 	}
 
-	protected function setGridResponse(ActionResponse $response)
+	protected function setGridResponse()
 	{
-		parent::setGridResponse($response);
+		$res = parent::setGridResponse();
 
-		$displayedColumns = $response->get('displayedColumns');
-		$availableColumns = $response->get('availableColumns');
+		$displayedColumns = $res['displayedColumns'];
+		$availableColumns = $res['availableColumns'];
 
 		foreach ($displayedColumns as $column => $type)
 		{
@@ -1243,13 +1120,15 @@ class ProductController extends ActiveGridController implements MassActionInterf
 			}
 		}
 
-		$response->set('displayedColumns', $displayedColumns);
-		$response->set('availableColumns', $availableColumns);
+		$res['displayedColumns'] = $displayedColumns;
+		$res['availableColumns'] = $availableColumns;
+
+		return $res;
 	}
 
-	private function buildForm(Product $product)
+	private function buildForm($isExisting)
 	{
-		return new Form($this->buildValidator($product));
+		return new Form($this->buildValidator($isExisting));
 	}
 
 	/**
@@ -1408,8 +1287,7 @@ class ProductController extends ActiveGridController implements MassActionInterf
 
 	protected function getRequestCategory()
 	{
-		$id = $this->request->get("id");
-		return is_numeric($id) ? $id : substr($id, 9);
+		return $this->request->get("id");
 	}
 }
 
